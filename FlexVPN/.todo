@@ -1,0 +1,11 @@
+snmp
+outside to inside dmz? if traffic doesn't
+ports of concert
+TCP/UDP 88 (Kerberos)
+TCP/UDP 389 (LDAP)
+TCP 636 (LDAP over SSL)
+TCP 445 (SMB for Group Policy etc)
+TCP 3268-3269 (Global Catalog)
+UDP 123 (NTP)
+centralize authentication
+keys

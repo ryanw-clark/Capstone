@@ -1,32 +1,38 @@
 ! ======================================================================
-! Oregon - DMVPN Hub
+! Oregon - FlexVPN Hub
 ! ======================================================================
 enable
 configure terminal
 
+! General
 hostname Oregon
 service password-encryption
 no ip domain-lookup
 banner motd #Unauthorized Access Prohibited#
 
+! AAA
 enable secret capstone
 aaa new-model
 aaa authentication login default local
 aaa authorization exec default local
 username admin privilege 15 secret capstone
 
+! Line
 line console 0
  logging synchronous
- exec-timeout 5 0
+ login authentication default
+ exec-timeout 10 0
 line vty 0 4
  logging synchronous
+ login authentication default
  transport input ssh
- exec-timeout 5 0
+ exec-timeout 10 0
 
 ip domain-name pixel.local
 crypto key generate rsa modulus 2048
 ip ssh version 2
 
+! Interfaces
 interface GigabitEthernet1
  description Link to ISP
  ip address 192.168.2.1 255.255.255.252
@@ -37,65 +43,64 @@ interface GigabitEthernet2
  ip address 10.2.1.1 255.255.255.0
  no shutdown
 
-interface Tunnel0
- ip address 172.16.0.1 255.255.255.0
- ip nhrp network-id 1
- ip nhrp map multicast dynamic
- tunnel source GigabitEthernet1
- tunnel mode gre multipoint
- tunnel key 1
- tunnel protection ipsec profile DMVPN-PROFILE
+! Authorization
+crypto ikev2 authorization policy FLEXVPN-AUTHOR-POLICY
+ pool FLEXVPN-POOL
+ route set interface
+ route accept any tag 100
 
-crypto ikev2 proposal DMVPN-PROPOSAL
- encryption aes-256
+! IKEv2
+crypto ikev2 proposal FLEXVPN-PROPOSAL
+ encryption aes-cbc-256
  integrity sha256
  group 14
 
-crypto ikev2 policy DMVPN-POLICY
- proposal DMVPN-PROPOSAL
+crypto ikev2 policy FLEXVPN-POLICY
+ proposal FLEXVPN-PROPOSAL
 
-crypto ikev2 keyring DMVPN-KEYRING
+! Keyring
+crypto ikev2 keyring FLEXVPN-KEYRING
  peer ANY
   address 0.0.0.0 0.0.0.0
   pre-shared-key capstone
 
-crypto ikev2 profile DMVPN-PROFILE
- match identity remote address 0.0.0.0
+! Profile
+crypto ikev2 profile FLEXVPN-PROFILE
+ match identity remote address 0.0.0.0 0.0.0.0
  authentication remote pre-share
  authentication local pre-share
- keyring local DMVPN-KEYRING
+ keyring local FLEXVPN-KEYRING
+ aaa authorization group psk list default FLEXVPN-AUTHOR-POLICY
+ virtual-template 1
 
-crypto ipsec transform-set DMVPN-TRANSFORM esp-aes 256 esp-sha256-hmac
+crypto ipsec transform-set FLEXVPN-TRANSFORM esp-aes 256 esp-sha256-hmac
  mode transport
 
-crypto ipsec profile DMVPN-PROFILE
- set transform-set DMVPN-TRANSFORM
- set ikev2-profile DMVPN-PROFILE
+crypto ipsec profile FLEXVPN-PROFILE
+ set transform-set FLEXVPN-TRANSFORM
+ set ikev2-profile FLEXVPN-PROFILE
 
+! Pool for VPN clients
+ip local pool FLEXVPN-POOL 172.16.0.2 172.16.0.254
+
+! Tunnel
+interface Tunnel1 type tunnel
+ ip address 172.16.0.1 255.255.255.0
+ ip mtu 1400
+ ip tcp adjust-mss 1360
+ tunnel source GigabitEthernet1
+ tunnel mode gre multipoint
+ tunnel protection ipsec profile FLEXVPN-PROFILE
+
+! OSPFv2
 router ospf 1
  network 10.2.1.0 0.0.0.255 area 0
  network 172.16.0.0 0.0.0.255 area 0
  default-information originate
  passive-interface default
- no passive-interface Tunnel0
+ no passive-interface Tunnel1
 
-ip access-list standard NAT-ACL
- permit 10.2.1.0 0.0.0.255
-
-ip access-list extended DMVPN-EXEMPT
- permit ip 10.2.1.0 0.0.0.255 10.1.1.0 0.0.0.255
- permit ip 10.2.1.0 0.0.0.255 10.3.1.0 0.0.0.255
-
-ip nat inside source list DMVPN-EXEMPT interface GigabitEthernet1 overload
-
-interface GigabitEthernet1
- ip nat outside
-
-interface GigabitEthernet2
- ip nat inside
-
-ntp server 192.168.2.1
-
+! ZBFW
 class-map type inspect match-any INSIDE-OUTSIDE-CLASS
  match protocol tcp
  match protocol udp
@@ -117,12 +122,19 @@ interface GigabitEthernet1
 interface GigabitEthernet2
  zone-member security INSIDE
 
-interface Tunnel0
+interface VPN-Tunnel-Template
  zone-member security DMZ
 
 zone-pair security IN-OUT source INSIDE destination OUTSIDE
  service-policy type inspect INSIDE-OUTSIDE-POLICY
 zone-pair security DMZ-INSIDE source DMZ destination INSIDE
  service-policy type inspect INSIDE-OUTSIDE-POLICY
+! zone-pair security DMZ-OUT source DMZ destination OUTSIDE
+!  service-policy type inspect INSIDE-OUTSIDE-POLICY
 
-ip route 0.0.0.0 0.0.0.0 192.168.2.1
+! Default Route
+ip route 0.0.0.0 0.0.0.0 192.168.2.2
+
+! NTP
+ntp server 192.168.2.1
+end
