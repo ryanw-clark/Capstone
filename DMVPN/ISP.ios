@@ -1,80 +1,121 @@
 ! ==============================================================================
-! ISP (Basic Config)
+! ISP
 ! ==============================================================================
-enable
-configure terminal
-
-! General
 hostname ISP
-service password-encryption
 no ip domain-lookup
+service password-encryption
 banner motd #Unauthorized Access Prohibited#
 
-! AAA
+! Security
 enable secret capstone
+username admin privilege 15 secret capstone
+
+! AAA
 aaa new-model
 aaa authentication login default local
 aaa authorization exec default local
-username admin privilege 15 secret capstone
+
+! SSH
+ip domain-name isp.local
+crypto key generate rsa modulus 4096
+ip ssh version 2
 
 ! Line
 line console 0
  logging synchronous
- ! login local
- exec-timeout 5 0
+ login authentication default
+ exec-timeout 10 0
+
 line vty 0 4
  logging synchronous
- ! login local
+ login authentication default
  transport input ssh
- exec-timeout 5 0
-
-! SSH
-exit
-ip domain-name pixel.local
-crypto key generate rsa modulus 2048
-ip ssh version 2
+ exec-timeout 10 0
+ access-class 10 in
 
 ! Interfaces
 interface GigabitEthernet1
  description WWW
- !ip address 8.8.8.8 255.255.255.255
  ip address 10.129.3.254 255.255.255.0
- ip nat outside
  no shutdown
+ ip nat outside
+ zone-member security INTERNET
 
 interface GigabitEthernet2
  description Link to Washington
- ip address 192.168.1.2 255.255.255.252
- ip nat inside
+ ip address 192.168.1.1 255.255.255.252
  no shutdown
+ ip nat inside
+ zone-member security WAN
 
 interface GigabitEthernet3
  description Link to Oregon
- ip address 192.168.2.2 255.255.255.252
- ip nat inside
+ ip address 192.168.2.1 255.255.255.252
  no shutdown
+ ip nat inside
+ zone-member security WAN
 
 interface GigabitEthernet4
  description Link to Hawaii
- ip address 192.168.3.2 255.255.255.252
- ip nat inside
+ ip address 192.168.3.1 255.255.255.252
  no shutdown
+ ip nat inside
+ zone-member security WAN
 
-! NAT
-ip access-list standard 1
- permit 10.3.1.0 0.0.0.255
- permit 10.2.1.0 0.0.0.255
- permit 10.1.1.0 0.0.0.255
-
-ip nat inside source list 1 interface GigabitEthernet1 overload
-
-! Static Routes
-ip route 10.1.1.0 255.255.255.0 192.168.1.1
-ip route 10.2.1.0 255.255.255.0 192.168.2.1
-ip route 10.3.1.0 255.255.255.0 192.168.3.1
-
+! Routing
 ip route 0.0.0.0 0.0.0.0 10.129.3.1
 
+! OSPF
+router ospf 1
+ router-id 1.1.1.1
+ passive-interface default
+ no passive-interface GigabitEthernet2
+ no passive-interface GigabitEthernet3
+ no passive-interface GigabitEthernet4
+ network 192.168.1.0 0.0.0.3 area 0
+ network 192.168.2.0 0.0.0.3 area 0
+ network 192.168.3.0 0.0.0.3 area 0
+ default-information originate always
+
 ! NTP
-ntp master 1
-ntp server time.nist.gov
+ntp server time.nist.gov prefer
+ntp master 4
+
+! ZBFW
+zone security INTERNET
+zone security WAN
+
+zone-pair security WAN-to-INTERNET source WAN destination INTERNET
+ service-policy type inspect WAN-TO-INTERNET-POLICY
+
+zone-pair security INTERNET-to-WAN source INTERNET destination WAN
+ service-policy type inspect INTERNET-TO-WAN-POLICY
+
+! Define Class Maps
+class-map type inspect match-any OSPF-TRAFFIC
+ match protocol ospf
+
+class-map type inspect match-any WAN-TRAFFIC
+ match protocol ip
+
+! Define Policy Maps
+policy-map type inspect WAN-TO-INTERNET-POLICY
+ class type inspect OSPF-TRAFFIC
+  pass
+ class type inspect WAN-TRAFFIC
+  inspect
+
+policy-map type inspect INTERNET-TO-WAN-POLICY
+ class type inspect OSPF-TRAFFIC
+  pass
+ class type inspect WAN-TRAFFIC
+  inspect
+
+! NAT
+access-list 100 permit ip any any
+
+ip nat inside source list 100 interface GigabitEthernet1 overload
+
+! ACL for VTY Lines
+access-list 10 permit 10.0.0.0 0.255.255.255
+access-list 10 deny any

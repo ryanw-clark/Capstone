@@ -1,9 +1,6 @@
 ! ==============================================================================
 ! ISP (Basic Config)
 ! ==============================================================================
-enable
-configure terminal
-
 ! General
 hostname ISP
 service password-encryption
@@ -74,5 +71,4 @@ ip route 10.3.1.0 255.255.255.0 192.168.3.1
 ip route 0.0.0.0 0.0.0.0 10.129.3.1
 
 ! NTP
-ntp master 1
-ntp server time.nist.gov
+ntp server time.nist.gov prefer
