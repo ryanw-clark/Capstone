@@ -84,7 +84,6 @@ ntp master 5
 ! ZBFW
 zone security INTERNET
 zone security WAN
-! zone security DMZ
 
 zone-pair security WAN-to-INTERNET source WAN destination INTERNET
  service-policy type inspect WAN-TO-INTERNET-POLICY
@@ -96,32 +95,23 @@ zone-pair security INTERNET-to-WAN source INTERNET destination WAN
 class-map type inspect match-any OSPF-TRAFFIC
  match protocol ospf
 
-! class-map type inspect match-any WAN-TRAFFIC
-!  match protocol ip
-
 class-map type inspect match-any INTERNAL-TRAFFIC
  match protocol ip
-
 
 ! Define Policy Maps
 policy-map type inspect WAN-TO-INTERNET-POLICY
  class type inspect OSPF-TRAFFIC
   pass
-!  class type inspect WAN-TRAFFIC
-!   inspect
  class type inspect INTERNAL-TRAFFIC
   inspect
 
 policy-map type inspect INTERNET-TO-WAN-POLICY
  class type inspect OSPF-TRAFFIC
   pass
-!  class type inspect WAN-TRAFFIC
-!   inspect
  class type inspect INTERNAL-TRAFFIC
   inspect
 
 ! NAT
-! access-list 100 permit ip any any
 access-list 100 permit ip 10.1.1.0 0.0.0.255 any
 access-list 100 permit ip 10.2.1.0 0.0.0.255 any
 access-list 100 permit ip 10.3.1.0 0.0.0.255 any
@@ -129,7 +119,6 @@ access-list 100 permit ip 10.3.1.0 0.0.0.255 any
 ip nat inside source list 100 interface GigabitEthernet1 overload
 
 ! ACL for VTY Lines
-! access-list 10 permit 10.0.0.0 0.255.255.255
 access-list 10 permit 10.1.1.0 0.0.0.255
 access-list 10 permit 10.2.1.0 0.0.0.255
 access-list 10 permit 10.3.1.0 0.0.0.255

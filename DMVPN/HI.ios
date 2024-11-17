@@ -106,18 +106,45 @@ zone security INSIDE
 zone security OUTSIDE
 zone security DMVPN
 
+! Define Class Maps
 class-map type inspect match-any DMVPN-TRAFFIC
  match protocol gre
  match protocol udp nhrp
  match protocol esp
  match protocol ospf
 
+class-map type inspect match-any INSIDE-TRAFFIC
+ match protocol ip
+
+! Define Policy Maps
 policy-map type inspect OUTSIDE-TO-DMVPN-POLICY
  class type inspect DMVPN-TRAFFIC
   pass
 
+policy-map type inspect INSIDE-TO-OUTSIDE-POLICY
+ class type inspect INSIDE-TRAFFIC
+  inspect
+
+policy-map type inspect INSIDE-TO-DMVPN-POLICY
+ class type inspect INSIDE-TRAFFIC
+  inspect
+
+policy-map type inspect DMVPN-TO-INSIDE-POLICY
+ class type inspect INSIDE-TRAFFIC
+  inspect
+
+! Define Zone-Pairs
 zone-pair security OUTSIDE-to-DMVPN source OUTSIDE destination DMVPN
  service-policy type inspect OUTSIDE-TO-DMVPN-POLICY
+
+zone-pair security INSIDE-to-OUTSIDE source INSIDE destination OUTSIDE
+ service-policy type inspect INSIDE-TO-OUTSIDE-POLICY
+
+zone-pair security INSIDE-to-DMVPN source INSIDE destination DMVPN
+ service-policy type inspect INSIDE-TO-DMVPN-POLICY
+
+zone-pair security DMVPN-to-INSIDE source DMVPN destination INSIDE
+ service-policy type inspect DMVPN-TO-INSIDE-POLICY
 
 ! NAT
 access-list 100 deny ip 10.3.1.0 0.0.0.255 172.16.0.0 0.0.0.255
