@@ -60,7 +60,8 @@ interface Tunnel0
  zone-member security DMVPN
 
 ! NTP
-ntp master 4
+ntp server time.nist.gov prefer
+ntp server 192.168.2.1
 
 ! IPsec
 crypto ikev2 keyring DMVPN_KEYRING
