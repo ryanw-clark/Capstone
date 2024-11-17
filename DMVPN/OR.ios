@@ -9,6 +9,8 @@ banner motd #Unauthorized Access Prohibited#
 ! Security
 enable secret capstone
 username admin privilege 15 secret capstone
+login block-for 120 attempts 6 within 60
+security passwords min-length 8
 
 ! AAA
 aaa new-model
@@ -19,34 +21,34 @@ aaa authorization exec default local
 ip domain-name oregon.local
 crypto key generate rsa modulus 4096
 ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 6
 
 ! Line
 line console 0
  logging synchronous
  login authentication default
- exec-timeout 10 0
+ exec-timeout 20 0
 
 line vty 0 4
  logging synchronous
  login authentication default
  transport input ssh
- exec-timeout 10 0
+ exec-timeout 20 0
  access-class 10 in
 
 ! Interfaces
 interface GigabitEthernet1
  description Link to ISP
  ip address 192.168.2.2 255.255.255.252
- no shutdown
  ip nat outside
- zone-member security OUTSIDE
+ no shutdown
 
 interface GigabitEthernet2
  description Local Network
  ip address 10.2.1.1 255.255.255.0
- no shutdown
  ip nat inside
- zone-member security INSIDE
+ no shutdown
 
 interface Tunnel0
  ip address 172.16.0.1 255.255.255.0
@@ -55,9 +57,17 @@ interface Tunnel0
  ip nhrp map multicast dynamic
  tunnel source GigabitEthernet1
  tunnel mode gre multipoint
- tunnel protection ipsec profile DMVPN_PROFILE
  no shutdown
- zone-member security DMVPN
+
+! Routing
+router ospf 1
+ router-id 2.2.2.2
+ passive-interface default
+ no passive-interface GigabitEthernet1
+ no passive-interface Tunnel0
+ network 10.2.1.0 0.0.0.255 area 0
+ network 172.16.0.0 0.0.0.255 area 0
+ network 192.168.2.0 0.0.0.3 area 0
 
 ! NTP
 ntp server time.nist.gov prefer
@@ -89,16 +99,6 @@ crypto ipsec transform-set DMVPN_TRANSFORM_SET esp-aes 256 esp-sha256-hmac
 crypto ipsec profile DMVPN_PROFILE
  set transform-set DMVPN_TRANSFORM_SET
  set ikev2-profile DMVPN_PROFILE
-
-! Routing
-router ospf 1
- router-id 2.2.2.2
- passive-interface default
- no passive-interface GigabitEthernet1
- no passive-interface Tunnel0
- network 10.2.1.0 0.0.0.255 area 0
- network 172.16.0.0 0.0.0.255 area 0
- network 192.168.2.0 0.0.0.3 area 0
 
 ! ZBFW
 zone security INSIDE
@@ -145,6 +145,16 @@ zone-pair security INSIDE-to-DMVPN source INSIDE destination DMVPN
 zone-pair security DMVPN-to-INSIDE source DMVPN destination INSIDE
  service-policy type inspect DMVPN-TO-INSIDE-POLICY
 
+interface GigabitEthernet1
+ zone-member security OUTSIDE
+
+interface GigabitEthernet2
+ zone-member security INSIDE
+
+interface Tunnel0
+  zone-member security DMVPN
+  tunnel protection ipsec profile DMVPN_PROFILE
+ 
 ! NAT
 access-list 100 deny ip 10.2.1.0 0.0.0.255 172.16.0.0 0.0.0.255
 access-list 100 permit ip 10.2.1.0 0.0.0.255 any

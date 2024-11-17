@@ -1,0 +1,22 @@
+! ZBFW
+show zone security
+show zone-pair security 
+show class-map type inspect
+show policy-map type inspect
+show platform packet-trace packet 0
+
+! OSPF
+show ip ospf brief
+show ip ospf neighbor detail
+show ip ospf interface brief
+show ip ospf database
+
+! NAT
+show ip nat translations
+show ip nat statistics
+
+! Routing, VPN
+show vrf
+show aaa servers
+show crypto isakmp sa
+show crypto ipsec sa

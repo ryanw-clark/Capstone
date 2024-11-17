@@ -9,6 +9,8 @@ banner motd #Unauthorized Access Prohibited#
 ! Security
 enable secret capstone
 username admin privilege 15 secret capstone
+login block-for 120 attempts 6 within 60
+security passwords min-length 8
 
 ! AAA
 aaa new-model
@@ -19,48 +21,47 @@ aaa authorization exec default local
 ip domain-name isp.local
 crypto key generate rsa modulus 4096
 ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 6
 
 ! Line
 line console 0
  logging synchronous
  login authentication default
- exec-timeout 10 0
+ exec-timeout 20 0
 
 line vty 0 4
  logging synchronous
  login authentication default
  transport input ssh
- exec-timeout 10 0
+ exec-timeout 20 0
  access-class 10 in
 
 ! Interfaces
 interface GigabitEthernet1
- description WWW
+ description Link to Internet
  ip address 10.129.3.254 255.255.255.0
- no shutdown
+ no cdp enable
  ip nat outside
- zone-member security INTERNET
+ no shutdown
 
 interface GigabitEthernet2
  description Link to Washington
  ip address 192.168.1.1 255.255.255.252
- no shutdown
  ip nat inside
- zone-member security WAN
+ no shutdown
 
 interface GigabitEthernet3
  description Link to Oregon
  ip address 192.168.2.1 255.255.255.252
- no shutdown
  ip nat inside
- zone-member security WAN
+ no shutdown
 
 interface GigabitEthernet4
  description Link to Hawaii
  ip address 192.168.3.1 255.255.255.252
- no shutdown
  ip nat inside
- zone-member security WAN
+ no shutdown
 
 ! Routing
 ip route 0.0.0.0 0.0.0.0 10.129.3.1
@@ -110,6 +111,18 @@ policy-map type inspect INTERNET-TO-WAN-POLICY
   pass
  class type inspect INTERNAL-TRAFFIC
   inspect
+
+interface GigabitEthernet1
+ zone-member security INTERNET
+
+interface GigabitEthernet2
+ zone-member security WAN
+
+interface GigabitEthernet3
+ zone-member security WAN
+
+interface GigabitEthernet4
+ zone-member security WAN
 
 ! NAT
 access-list 100 permit ip 10.1.1.0 0.0.0.255 any
