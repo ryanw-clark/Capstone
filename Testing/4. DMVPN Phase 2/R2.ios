@@ -1,0 +1,16 @@
+Router-2(config-if)#do show run int tun 1
+Building configuration...
+
+Current configuration : 210 bytes
+!
+interface Tunnel1
+ ip address 10.55.0.2 255.255.255.0
+ no ip redirects
+ ip nhrp map 10.55.0.1 10.0.1.1
+ ip nhrp network-id 1
+ ip nhrp nhs 10.55.0.1
+ tunnel source Ethernet0/0
+ tunnel mode gre multipoint
+end
+
+Router-2(config-if)#

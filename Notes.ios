@@ -1,0 +1,5 @@
+Router-1#show ip nhrp
+Router-1#show ip nhrp multicast 
+Router-1#show dmvpn
+router-2#show ip cef 3.3.3.3
+router-2#show ip nhrp shortcut

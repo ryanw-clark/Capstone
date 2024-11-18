@@ -1,0 +1,23 @@
+Router-1(config-if)#do show run int tun 1
+Building configuration...
+
+Current configuration : 213 bytes
+!
+interface Tunnel1
+ ip address 10.55.0.1 255.255.255.0
+ no ip redirects
+ ip nhrp authentication DMVPN
+ ip nhrp network-id 1
+ ip nhrp redirect
+ shutdown
+ tunnel source Ethernet0/0
+ tunnel mode gre multipoint
+end
+
+Router-1(config-if)#
+
+Router-1(config-if)#do show run | section ospf
+router ospf 1
+ network 1.1.1.1 0.0.0.0 area 0
+ network 10.55.0.0 0.0.0.255 area 0
+Router-1(config-if)#

@@ -1,0 +1,31 @@
+Router-2#show run int tun 1
+Building configuration...
+
+Current configuration : 309 bytes
+!
+interface Tunnel1
+ ip address 10.55.0.2 255.255.255.0
+ no ip redirects
+ ip nhrp authentication DMVPN
+ ip nhrp map 10.55.0.1 10.0.1.1
+ ip nhrp map multicast 10.0.1.1
+ ip nhrp network-id 1
+ ip nhrp nhs 10.55.0.1
+ ip ospf network point-to-multipoint
+ tunnel source Ethernet0/0
+ tunnel mode gre multipoint
+end
+
+Router-2#
+
+Router-2#show run | section ospf
+ ip ospf network point-to-multipoint
+router ospf 1
+ network 2.2.2.2 0.0.0.0 area 0
+ network 10.55.0.0 0.0.0.255 area 0
+Router-2#
+
+Router-2#show ip ospf neighbor 
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+1.1.1.1           0   FULL/  -        00:01:35    10.55.0.1       Tunnel1
+Router-2#

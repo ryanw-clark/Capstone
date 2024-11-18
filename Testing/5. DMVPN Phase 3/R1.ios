@@ -1,0 +1,20 @@
+Router-1#show run int tun 1
+Building configuration...
+
+Current configuration : 173 bytes
+!
+interface Tunnel1
+ ip address 10.55.0.1 255.255.255.0
+ no ip redirects
+ ip nhrp network-id 1
+ ip nhrp redirect
+ tunnel source Ethernet0/0
+ tunnel mode gre multipoint
+end
+
+Router-1#
+!
+! Older guides to DMVPN phase 3 configurations will have you configure the command 
+! “ip nhrp shortcut” on spoke routers. This is unnecessary on later versions of IOS-XE because it’s
+! enabled by default.
+!

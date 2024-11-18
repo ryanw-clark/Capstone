@@ -1,0 +1,19 @@
+Router-2#show run int tun 1
+Building configuration...
+
+Current configuration : 117 bytes
+!
+interface Tunnel1
+ ip address 10.55.0.2 255.255.255.0
+end
+
+Router-2#show run int tun 1
+Building configuration...
+
+Current configuration : 117 bytes
+!
+interface Tunnel1
+ ip address 10.55.0.2 255.255.255.0
+ tunnel source Ethernet0/0
+ tunnel destination 10.0.1.1
+end
