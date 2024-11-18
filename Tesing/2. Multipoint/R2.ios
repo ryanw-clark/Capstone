@@ -1,0 +1,140 @@
+Building configuration...
+
+Current configuration : 1634 bytes
+!
+! Last configuration change at 06:02:13 UTC Mon Nov 18 2024
+!
+version 17.12
+service timestamps debug datetime msec
+service timestamps log datetime msec
+!
+hostname Router-2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no logging console
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip domain name virl.info
+ip cef
+login on-success log
+no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+memory free low-watermark processor 81225
+!
+!
+spanning-tree mode rapid-pvst
+!
+enable secret 9 $9$4n1TxUlB07D68E$rj4WAoA/H1YkQSghzaUuRYgAlBTR4K5Iv/WU.GF.TVg
+enable password cisco
+!
+username cisco privilege 15 secret 9 $9$B6yKAX9cxVaOWE$gUz0VMCfvaUMPsEa87YF9nP7tHSAXG7hET7n1u0r0tE
+!
+!
+!
+!
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback0 - 2.2.2.2/32
+ ip address 2.2.2.2 255.255.255.255
+!
+interface Tunnel1
+ ip address 10.55.0.2 255.255.255.0
+ tunnel source Ethernet0/0
+ tunnel destination 10.0.1.1
+!
+interface Ethernet0/0
+ description to port1.unmanaged-switch-0
+ ip address 10.0.1.2 255.255.255.0
+!
+interface Ethernet0/1
+ description not connected
+ no ip address
+ shutdown
+!
+interface Ethernet0/2
+ description not connected
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ description not connected
+ no ip address
+ shutdown
+!
+ip forward-protocol nd
+!
+!
+ip http server
+ip http secure-server
+ip ssh bulk-mode 131072
+ip ssh server algorithm authentication password
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+line con 0
+ exec-timeout 0 0
+ password cisco
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 0 0
+ password cisco
+ login local
+ transport input telnet ssh
+!
+!
+!
+!
+end

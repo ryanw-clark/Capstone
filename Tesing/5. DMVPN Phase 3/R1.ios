@@ -1,0 +1,5 @@
+!
+! Older guides to DMVPN phase 3 configurations will have you configure the command 
+! “ip nhrp shortcut” on spoke routers. This is unnecessary on later versions of IOS-XE because it’s
+! enabled by default.
+!
