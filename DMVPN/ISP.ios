@@ -22,7 +22,7 @@ ip domain-name isp.local
 crypto key generate rsa modulus 4096
 ip ssh version 2
 ip ssh time-out 60
-ip ssh authentication-retries 6
+ip ssh authentication-retries 5
 
 ! Line
 line console 0

@@ -43,11 +43,13 @@ interface Loopback 1
 interface GigabitEthernet1
  description Link to ISP
  ip address 192.168.2.2 255.255.255.252
+ ip nat outside
  no shutdown
 
 interface GigabitEthernet2
  description Local Network
  ip address 10.2.1.1 255.255.255.0
+ ip nat inside
  no shutdown
 
 ! IPsec
@@ -80,6 +82,7 @@ interface Tunnel1
  ip mtu 1400
  ip tcp adjust-mss 1360
  ipv6 tcp adjust-mss 1340
+ bandwidth 100000
  no shutdown
 
 ! Routing
@@ -87,7 +90,6 @@ router ospf 1
  router-id 1.1.1.1
  passive-interface default
  no passive-interface Tunnel1
- network 1.1.1.1 0.0.0.0 area 0
  network 10.2.1.0 0.0.0.255 area 0
  network 172.16.0.0 0.0.0.255 area 0
 
@@ -96,3 +98,7 @@ ip route 0.0.0.0 0.0.0.0 192.168.2.1
 ! NTP
 ntp server time.nist.gov prefer
 ntp server 192.168.2.1
+
+! NAT
+access-list 1 permit 10.2.1.0 0.0.0.255
+ip nat inside source list 1 interface GigabitEthernet1 overload
