@@ -1,0 +1,12 @@
+interface Tunnel1
+ bandwidth 100000
+ ip address 10.55.0.1 255.255.255.0
+ no ip redirects
+ ip ospf network point-to-multipoint
+ ip nhrp network-id 1
+ ip nhrp redirect
+ ip ospf cost 10
+ tunnel source Ethernet0/0
+ tunnel mode gre multipoint
+ tunnel key 1
+

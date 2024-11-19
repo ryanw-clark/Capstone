@@ -21,11 +21,26 @@ Router-1#show run | section ospf
 router ospf 1
  network 1.1.1.1 0.0.0.0 area 0
  network 10.55.0.0 0.0.0.255 area 0
-Router-1#
 
-Router-1#show ip ospf neighbor 
 
+Router-1#show ip ospf neighbor
 Neighbor ID     Pri   State           Dead Time   Address         Interface
 3.3.3.3           0   FULL/  -        00:01:37    10.55.0.3       Tunnel1
 2.2.2.2           0   FULL/  -        00:01:56    10.55.0.2       Tunnel1
-Router-1#
+
+! OSPF network types
+! Point-to-point, Point-to-multipoint, Broadcast, Point-to-multipoint
+! non-broadcast, non-broadcast
+
+! Broadcast
+! choosing point-to-multipoint is a significantly better choice
+!
+interface Tunnel1
+ ip address 10.55.0.1 255.255.255.0
+ no ip redirects
+ ip nhrp network-id 1
+ ip nhrp redirect
+ ip ospf network broadcast
+ ip ospf priority 100
+ tunnel source Ethernet0/0
+ tunnel mode gre multipoint
