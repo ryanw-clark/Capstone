@@ -31,127 +31,63 @@ line vty 0 4
  login authentication default
  transport input ssh
  exec-timeout 10 0
- access-class 10 in
 
 ! Interfaces
+interface Loopback 1
+ ip address 2.2.2.2 255.255.255.255
+
 interface GigabitEthernet1
  description Link to ISP
  ip address 192.168.1.2 255.255.255.252
  no shutdown
- ip nat outside
- zone-member security OUTSIDE
 
 interface GigabitEthernet2
  description Local Network
  ip address 10.1.1.1 255.255.255.0
  no shutdown
- ip nat inside
- zone-member security INSIDE
-
-interface Tunnel0
- ip address 172.16.0.2 255.255.255.0
- ip nhrp network-id 1
- ip nhrp authentication capstone
- ip nhrp nhs 172.16.0.1
- ip nhrp map 172.16.0.1 192.168.2.1
- tunnel source GigabitEthernet1
- tunnel mode gre multipoint
- tunnel protection ipsec profile DMVPN_PROFILE
- no shutdown
- zone-member security DMVPN
 
 ! IPsec
-crypto ikev2 keyring DMVPN_KEYRING
- peer ANY
-  address 0.0.0.0 0.0.0.0
-  pre-shared-key capstone
+crypto ikev2 keyring DMVPN-KEYRING
+ peer DMVPN-PEER
+ address 0.0.0.0 0.0.0.0
+ pre-shared-key capstone
 
-crypto ikev2 proposal DMVPN_PROPOSAL
- encryption aes-cbc-256
- integrity sha256
- group 14
-
-crypto ikev2 policy DMVPN_POLICY
- proposal DMVPN_PROPOSAL
-
-crypto ikev2 profile DMVPN_PROFILE
- match identity remote any
- authentication remote pre-share
+crypto ikev2 profile DMVPN-PROFILE
+ keyring local DMVPN-KEYRING
  authentication local pre-share
- keyring local DMVPN_KEYRING
+ authentication remote pre-share
+ match identity remote address 0.0.0.0 0.0.0.0
 
-crypto ipsec transform-set DMVPN_TRANSFORM_SET esp-aes 256 esp-sha256-hmac
- mode transport
+crypto ipsec profile DMVPN-IPSEC
+ set ikev2-profile DMVPN-PROFILE
 
-crypto ipsec profile DMVPN_PROFILE
- set transform-set DMVPN_TRANSFORM_SET
- set ikev2-profile DMVPN_PROFILE
+! DMVPN
+interface Tunnel1
+ ip address 172.16.0.2 255.255.255.0
+ no ip redirects
+ ip nhrp authentication DMVPN
+ ip nhrp network-id 1
+ ip nhrp nhs 172.16.0.1 nbma 192.168.2.2
+ ip ospf network point-to-multipoint
+ tunnel source GigabitEthernet1
+ tunnel mode gre multipoint
+ tunnel key 1
+ tunnel protection ipsec profile DMVPN-IPSEC
+ ip mtu 1400
+ ip tcp adjust-mss 1360
+ ipv6 tcp adjust-mss 1340
 
 ! Routing
 router ospf 1
- router-id 3.3.3.3
+ router-id 2.2.2.2
  passive-interface default
- no passive-interface GigabitEthernet1
- no passive-interface Tunnel0
+ no passive-interface Tunnel1
+ network 2.2.2.2 0.0.0.0 area 0
  network 10.1.1.0 0.0.0.255 area 0
  network 172.16.0.0 0.0.0.255 area 0
- network 192.168.1.0 0.0.0.3 area 0
+
+ip route 0.0.0.0 0.0.0.0 192.168.1.1
 
 ! NTP
 ntp server time.nist.gov prefer
 ntp server 192.168.1.1
-
-! ZBFW
-zone security INSIDE
-zone security OUTSIDE
-zone security DMVPN
-
-! Define Class Maps
-class-map type inspect match-any DMVPN-TRAFFIC
- match protocol gre
- match protocol udp nhrp
- match protocol esp
- match protocol ospf
-
-class-map type inspect match-any INSIDE-TRAFFIC
- match protocol ip
-
-! Define Policy Maps
-policy-map type inspect OUTSIDE-TO-DMVPN-POLICY
- class type inspect DMVPN-TRAFFIC
-  pass
-
-policy-map type inspect INSIDE-TO-OUTSIDE-POLICY
- class type inspect INSIDE-TRAFFIC
-  inspect
-
-policy-map type inspect INSIDE-TO-DMVPN-POLICY
- class type inspect INSIDE-TRAFFIC
-  inspect
-
-policy-map type inspect DMVPN-TO-INSIDE-POLICY
- class type inspect INSIDE-TRAFFIC
-  inspect
-
-! Define Zone-Pairs
-zone-pair security OUTSIDE-to-DMVPN source OUTSIDE destination DMVPN
- service-policy type inspect OUTSIDE-TO-DMVPN-POLICY
-
-zone-pair security INSIDE-to-OUTSIDE source INSIDE destination OUTSIDE
- service-policy type inspect INSIDE-TO-OUTSIDE-POLICY
-
-zone-pair security INSIDE-to-DMVPN source INSIDE destination DMVPN
- service-policy type inspect INSIDE-TO-DMVPN-POLICY
-
-zone-pair security DMVPN-to-INSIDE source DMVPN destination INSIDE
- service-policy type inspect DMVPN-TO-INSIDE-POLICY
-
-! NAT
-access-list 100 deny ip 10.1.1.0 0.0.0.255 172.16.0.0 0.0.0.255
-access-list 100 permit ip 10.1.1.0 0.0.0.255 any
-
-ip nat inside source list 100 interface GigabitEthernet1 overload
-
-! ACL for VTY Lines
-access-list 10 permit 10.1.1.0 0.0.0.255
-access-list 10 deny any
