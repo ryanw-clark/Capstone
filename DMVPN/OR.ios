@@ -99,6 +99,9 @@ ip route 0.0.0.0 0.0.0.0 192.168.2.1
 ntp server time.nist.gov prefer
 ntp server 192.168.2.1
 
+! OSPF-ADJ changes
+logging console 4
+
 ! NAT
 access-list 1 permit 10.2.1.0 0.0.0.255
 ip nat inside source list 1 interface GigabitEthernet1 overload

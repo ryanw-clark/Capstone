@@ -79,6 +79,7 @@ interface Tunnel1
  ip tcp adjust-mss 1360
  ipv6 tcp adjust-mss 1340
  bandwidth 100000
+ no shutdown
 
 ! Routing
 router ospf 1
@@ -93,6 +94,9 @@ ip route 0.0.0.0 0.0.0.0 192.168.3.1
 ! NTP
 ntp server time.nist.gov prefer
 ntp server 192.168.3.1
+
+! OSPF-ADJ changes
+logging console 4
 
 ! NAT
 access-list 1 permit 10.3.1.0 0.0.0.255
