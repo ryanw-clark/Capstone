@@ -1,0 +1,8 @@
+!
+! R1
+!
+enable
+configure terminal
+interface G0/0
+ip helper-address 10.1.1.2
+exit

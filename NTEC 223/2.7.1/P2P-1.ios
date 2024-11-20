@@ -1,0 +1,19 @@
+!
+! P2P-1
+!
+enable
+configure terminal
+router ospf 10
+auto-cost reference-bandwidth 1000
+network 10.0.0.0 0.0.0.3 area 0
+network 10.0.0.8 0.0.0.3 area 0
+network 10.0.0.12 0.0.0.3 area 0
+exit
+interface S0/1/1
+ip ospf cost 50
+exit
+interface S0/2/0
+ip ospf hello-interval 20
+ip ospf dead-interval 80
+end
+copy run start

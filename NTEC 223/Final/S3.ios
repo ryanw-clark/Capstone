@@ -1,0 +1,24 @@
+!
+! S3
+!
+enable
+configure terminal
+hostname S3
+interface vlan1
+ip address 209.165.202.130 255.255.255.224
+no shutdown
+exit
+ip default-gateway 209.165.202.129
+end
+configure terminal
+!
+! ACL
+!
+ip access-list standard S3-VTY-LIMIT
+remark This ACL Secures Incoming VTY Lines
+permit host 172.16.2.5
+deny any
+exit
+line vty 0 15
+access-class S3-VTY-LIMIT in
+end

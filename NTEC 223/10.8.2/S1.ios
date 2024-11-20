@@ -1,0 +1,46 @@
+!
+! S1
+!
+enable
+configure terminal
+hostname S1
+no ip domain lookup
+enable secret class
+line console 0
+password cisco
+login
+line vty 0 15
+password cisco
+login
+exit
+service password-encryption
+banner motd #Authorized Users Only!#
+interface range F0/2-4, F0/6-24, G0/1-2
+description Unused
+shutdown
+exit
+!
+! Step 2
+!
+interface vlan 1
+description Management SVI
+ip address 10.22.0.2 255.255.255.0
+no shutdown
+exit
+ip default-gateway 10.22.0.1
+end
+copy run start
+!
+! Step 3
+!
+configure terminal
+no cdp run
+lldp run
+end
+!
+! Step 4
+!
+configure terminal
+ntp server 10.22.0.1
+end
+copy run start

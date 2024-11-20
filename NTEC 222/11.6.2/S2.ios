@@ -1,0 +1,88 @@
+!
+! S2
+!
+enable
+configure terminal
+hostname S2
+no ip domain lookup
+interface F0/1
+description to S1 F0/1
+interface F0/18
+description to PC-B
+exit
+ip default-gateway 192.168.10.1
+vlan 10
+name Management
+exit
+interface vlan 10
+description Management
+ip address 192.168.10.202 255.255.255.0
+no shutdown
+exit
+vlan 333
+name Native
+vlan 999
+name ParkingLot
+exit
+interface F0/1
+switchport mode trunk
+switchport trunk native vlan 333
+end
+!
+! show interface trunk
+!
+configure terminal
+interface F0/1
+switchport nonegotiate
+exit
+!
+! do show interfaces f0/1 switchport | include Negotiation
+!
+interface F0/18
+switchport mode access
+switchport access vlan 10
+exit
+interface range F0/2-17, F0/19-24, G0/1-2
+switchport mode access
+switchport access vlan 999
+shutdown
+end
+!
+! show interfaces status
+!
+configure terminal
+interface F0/18
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security maximum 2
+switchport port-security violation protect
+switchport port-security aging time 60
+end
+!
+! show port-security interface f0/18
+!
+! show port-security address
+!
+configure terminal
+ip dhcp snooping
+ip dhcp snooping vlan 10
+interface F0/1
+ip dhcp snooping trust
+interface F0/18
+ip dhcp snooping limit rate 5
+end
+!
+! show ip dhcp snooping
+!
+! show ip dhcp snooping binding
+!
+configure terminal
+interface F0/18
+spanning-tree portfast
+spanning-tree bpduguard enable
+end
+!
+! show running-config | begin span
+!
+! show spanning-tree summary
+!

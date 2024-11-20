@@ -1,0 +1,41 @@
+!
+! R1
+!
+enable
+configure terminal
+hostname R1
+no ip domain lookup
+enable secret class
+line console 0
+password cisco
+login
+exit
+line vty 0 15
+password cisco
+login
+exit
+service password-encryption
+banner motd #Unauthorized Access Prohibited#
+ip route 0.0.0.0 0.0.0.0 G0/0/0
+interface G0/0/0
+description Connection to Web Server
+ip address 172.16.1.1 255.255.255.0
+no shutdown
+exit
+interface G0/0/1
+description Connection to S1 G0/1
+ip address 10.53.0.1 255.255.255.0
+ip ospf priority 50
+ip ospf hello-interval 30
+ip ospf dead-interval 120
+no shutdown
+exit
+router ospf 56
+router-id 1.1.1.1
+network 10.53.0.0 0.0.0.255 area 0
+network 172.16.1.0 0.0.0.255 area 0
+no network 172.16.1.0 0.0.0.255 area 0
+default-information originate
+auto-cost reference-bandwidth 1000
+end
+copy run start

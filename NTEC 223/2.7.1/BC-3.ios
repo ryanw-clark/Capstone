@@ -1,0 +1,14 @@
+!
+! BC-3
+!
+enable
+configure terminal
+interface range G0/0/0-1
+ip ospf 10 area 0
+exit
+router ospf 10
+router-id 4.4.4.4
+auto-cost reference-bandwidth 1000
+passive-interface G0/0/0
+end
+copy run start

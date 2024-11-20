@@ -1,0 +1,28 @@
+!
+! 214-A
+!
+enable
+configure terminal
+hostname 214-A
+banner motd #Unauthorized Access Prohibited#
+no ip domain lookup
+enable secret class
+service password-encryption
+line console 0
+password class
+logging synchronous
+exec-timeout 6
+login
+line vty 0 15
+password class
+logging synchronous
+exec-timeout 6
+login
+exit
+ip default-gateway 192.168.1.158
+interface vlan 1
+description SVI
+ip address 192.168.1.157 255.255.255.240
+no shutdown
+end
+copy run start

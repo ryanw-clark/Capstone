@@ -1,0 +1,22 @@
+!
+! S2
+!
+enable
+configure terminal
+hostname S2
+no ip domain lookup
+enable secret class
+line console 0
+password cisco
+login
+line vty 0 15
+password cisco
+login
+exit
+service password-encryption
+banner motd #Unauthorized Access Prohibited#
+! F0/1 S1, F0/5 R2
+interface range F0/2-4, F0/6-24, G0/1-2
+shutdown
+end
+copy run start

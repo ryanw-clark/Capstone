@@ -1,0 +1,13 @@
+!
+! P2P-3
+!
+enable
+configure terminal
+router ospf 10
+auto-cost reference-bandwidth 1000
+network 10.0.0.4 0.0.0.3 area 0
+network 10.0.0.8 0.0.0.3 area 0
+network 192.168.3.0 0.0.0.15 area 0
+passive-interface G0/0/0
+end
+copy run start

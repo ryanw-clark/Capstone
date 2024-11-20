@@ -1,0 +1,59 @@
+!
+! S1
+!
+enable
+configure terminal
+no ip domain lookup
+hostname S1
+banner motd #Unauthorized Access is Prohibitted!#
+line con 0
+password ciscoconpass
+login
+exit
+enable secret ciscoenpass
+service password-encryption
+username admin secret admin1pass
+ip domain-name ccna-ptsa.com
+crypto key generate rsa general-keys modulus 1024
+ip ssh version 2
+line vty 0 15
+login local
+transport input ssh
+exit
+int vlan 4
+description Management Interface
+ip address 10.19.8.98 255.255.255.248
+exit
+ip default-gateway 10.19.8.97
+vlan 2
+name Bikes
+vlan 3
+name Trikes
+vlan 4
+name Management
+vlan 5
+name Parking
+vlan 6
+name Native
+exit
+int range F0/1-2, F0/5
+switchport mode trunk
+switchport trunk native vlan 6
+exit
+int range F0/1-2
+channel-group 1 mode active
+interface port-channel 1
+exit
+int F0/6
+description PC-A
+switchport mode access
+switchport access vlan 2
+switchport port-security
+switchport port-security maximum 3
+exit
+int range F0/3-4, F0/7-24, G0/1-2
+description Unused Interfaces
+switchport mode access
+switchport access vlan 5
+shutdown
+exit

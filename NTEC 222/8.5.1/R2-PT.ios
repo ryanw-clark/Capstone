@@ -1,0 +1,47 @@
+!
+! R2
+!
+enable
+configure terminal
+hostname R2
+no ip domain lookup
+enable secret class
+line console 0
+password cisco
+login
+line vty 0 4
+password cisco
+login
+exit
+service password-encryption
+banner motd #Unauthorized Access is Prohibited#
+ipv6 unicast-routing
+!
+! 1.4
+!
+interface G0/0/0
+description Connection to G0/0/0 R1
+ipv6 address 2001:db8:acad:2::2/64
+ipv6 address fe80::2 link-local
+no shutdown
+interface G0/0/1
+description Connection to F0/5 S2
+ipv6 address 2001:db8:acad:3::1/64
+ipv6 address fe80::1 link-local
+no shutdown
+exit
+ipv6 route ::/0 2001:db8:acad:2::1
+end
+!
+! Stateful DHCPv6 Server
+!
+configure terminal
+ipv6 dhcp pool R2-STATEFUL
+address prefix 2001:db8:acad:3:aaa::/80
+dns-server 2001:db8:acad::254
+domain-name STATEFUL.com
+exit
+interface G0/0/1
+ipv6 nd managed-config-flag
+ipv6 dhcp server R2-STATEFUL
+end

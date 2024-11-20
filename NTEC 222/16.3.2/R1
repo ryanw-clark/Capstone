@@ -1,0 +1,154 @@
+!! NETLAB+ saved configuration: time="2024-06-16 19:40:06 UTC" device="R1" hardware="C4321-NS" reservation="24274"
+!
+! Last configuration change at 19:06:35 UTC Sun Jun 16 2024
+!
+version 16.9
+service timestamps debug datetime msec
+service timestamps log datetime msec
+platform qfp utilization monitor load 80
+no platform punt-keepalive disable-kernel-core
+!
+hostname R1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+login on-success log
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+! 
+! 
+! 
+! 
+!
+ipv6 unicast-routing
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+no license smart enable
+diagnostic bootup level minimal
+!
+spanning-tree extend system-id
+!
+!
+!
+!
+redundancy
+ mode none
+!
+!
+!
+!
+!
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
+! 
+!
+!
+interface Loopback1
+ ip address 172.16.1.1 255.255.255.0
+ ipv6 address FE80::1 link-local
+ ipv6 address 2001:DB8:ACAD:171::1/64
+ no shutdown
+!
+interface Loopback2
+ ip address 209.165.200.1 255.255.255.128
+ ipv6 address FE80::1 link-local
+ ipv6 address 2001:DB8:ACAD:209::1/64
+ no shutdown
+!
+interface GigabitEthernet0/0/0
+ ip address 192.168.0.1 255.255.255.240
+ negotiation auto
+ ipv6 address FE80::1 link-local
+ ipv6 address 2001:DB8:ACAD::1/64
+ no shutdown
+!
+interface GigabitEthernet0/0/1
+ ip address 192.168.0.17 255.255.255.240
+ negotiation auto
+ ipv6 address FE80::1 link-local
+ ipv6 address 2001:DB8:ACAD:16::1/64
+ no shutdown
+!
+interface GigabitEthernet0
+ vrf forwarding Mgmt-intf
+ no ip address
+ negotiation auto
+ no shutdown
+!
+ip forward-protocol nd
+no ip http server
+ip http secure-server
+ip tftp source-interface GigabitEthernet0
+ip route 0.0.0.0 0.0.0.0 192.168.0.14
+ip route 0.0.0.0 0.0.0.0 192.168.0.30 5
+ip route 209.165.200.128 255.255.255.128 192.168.0.30
+!
+!
+ipv6 route ::/0 2001:DB8:ACAD:16::2
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ logging synchronous
+ transport input none
+ stopbits 1
+line aux 0
+ stopbits 1
+line vty 0 4
+ login
+!
+!
+!
+!
+!
+!
+end

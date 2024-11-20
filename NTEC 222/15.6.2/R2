@@ -1,0 +1,165 @@
+!! NETLAB+ saved configuration: time="2024-06-15 23:37:12 UTC" device="R2" hardware="C4321-NS" reservation="24258"
+!
+! Last configuration change at 16:01:19 UTC Sat Jun 15 2024
+!
+version 16.9
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+platform qfp utilization monitor load 80
+no platform punt-keepalive disable-kernel-core
+!
+hostname R2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable secret 5 $1$0XDt$AfSC88AknkYrk3y3obsCW.
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+!
+!
+!
+login on-success log
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+! 
+! 
+! 
+! 
+!
+ipv6 unicast-routing
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+no license smart enable
+diagnostic bootup level minimal
+!
+spanning-tree extend system-id
+!
+!
+!
+!
+redundancy
+ mode none
+!
+!
+!
+!
+!
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
+! 
+!
+!
+interface Loopback1
+ description Lo1
+ ip address 10.2.0.1 255.255.255.0
+ ipv6 address FE80::2 link-local
+ ipv6 address 2001:DB8:ACAD:11::2/64
+ no shutdown
+!
+interface Loopback2
+ description Lo2
+ ip address 209.165.200.193 255.255.255.224
+ ipv6 address FE80::2 link-local
+ ipv6 address 2001:DB8:ACAD:210::1/64
+ no shutdown
+!
+interface GigabitEthernet0/0/0
+ description Connection to R1
+ ip address 172.16.1.2 255.255.255.0
+ shutdown
+ negotiation auto
+ ipv6 address FE80::2 link-local
+ ipv6 address 2001:DB8:ACAD:2::2/64
+!
+interface GigabitEthernet0/0/1
+ description Connection to S2
+ ip address 192.168.1.2 255.255.255.0
+ negotiation auto
+ ipv6 address FE80::2 link-local
+ ipv6 address 2001:DB8:ACAD:1::2/64
+ no shutdown
+!
+interface GigabitEthernet0
+ vrf forwarding Mgmt-intf
+ no ip address
+ negotiation auto
+ no shutdown
+!
+ip forward-protocol nd
+no ip http server
+ip http secure-server
+ip tftp source-interface GigabitEthernet0
+ip route 0.0.0.0 0.0.0.0 172.16.1.1
+!
+!
+ipv6 route 2001:DB8:ACAD:10::/64 2001:DB8:ACAD:1::1
+ipv6 route ::/0 2001:DB8:ACAD:1::1 80
+ipv6 route ::/0 2001:DB8:ACAD:2::1
+!
+!
+!
+!
+control-plane
+!
+banner motd ^CUnauthorized Access Prohibited^C
+!
+line con 0
+ password 7 110A1016141D
+ logging synchronous
+ login
+ transport input none
+ stopbits 1
+line aux 0
+ stopbits 1
+line vty 0 4
+ password 7 104D000A0618
+ login
+!
+!
+!
+!
+!
+!
+end

@@ -1,0 +1,78 @@
+!
+! S1
+!
+enable
+configure terminal
+hostname S1
+no ip domain lookup
+interface F0/1
+description to S2 F0/1
+interface F0/5
+description to R1 G0/0/1
+interface F0/6
+description to PC-A
+exit
+ip default-gateway 192.168.10.1
+vlan 10
+name Management
+exit
+interface vlan 10
+description Management
+ip address 192.168.10.201 255.255.255.0
+no shutdown
+exit
+vlan 333
+name Native
+vlan 999
+name ParkingLot
+exit
+interface F0/1
+switchport mode trunk
+switchport trunk native vlan 333
+end
+!
+! show interface trunk
+!
+configure terminal
+interface F0/1
+switchport nonegotiate
+exit
+!
+! do show interfaces f0/1 switchport | include Negotiation
+!
+interface range F0/5-6
+switchport mode access
+switchport access vlan 10
+exit
+interface range F0/2-4, F0/7-24, G0/1-2
+switchport mode access
+switchport access vlan 999
+shutdown
+end
+!
+! show interfaces status
+!
+! show port-security interface f0/6
+!
+configure terminal
+interface F0/6
+switchport port-security
+switchport port-security maximum 3
+switchport port-security violation restrict
+switchport port-security aging time 60
+switchport port-security aging type inactivity
+end
+!
+! show port-security interface f0/6
+!
+! show port-security address
+!
+configure terminal
+interface range f0/5 - 6
+spanning-tree portfast
+interface f0/6
+spanning-tree bpduguard enable
+end
+!
+! show spanning-tree interface f0/6 detail
+!

@@ -1,0 +1,13 @@
+!
+! Branch
+!
+enable
+configure terminal
+ip access-list extended branch_to_hq
+deny ip 192.168.2.0 0.0.0.31 192.168.1.0 0.0.0.63
+deny ip 192.168.2.32 0.0.0.15 192.168.1.0 0.0.0.63
+permit ip any any
+exit
+interface S0/1/1
+ip access-group branch_to_hq out
+exit

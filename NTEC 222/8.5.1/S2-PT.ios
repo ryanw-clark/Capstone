@@ -1,0 +1,22 @@
+!
+! S2
+!
+enable
+configure terminal
+hostname S2
+no ip domain lookup
+enable secret class
+line console 0
+password cisco
+login
+line vty 0 15
+password cisco
+login
+exit
+service password-encryption
+!
+! Active F0/5, F0/18
+!
+interface range F0/1-4, F0/6-17, F0/19-24, G0/1-2
+shutdown
+end

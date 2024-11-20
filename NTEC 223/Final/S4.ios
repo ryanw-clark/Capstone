@@ -1,0 +1,11 @@
+!
+! S4
+!
+enable
+configure terminal
+hostname S4
+interface vlan1
+ip address 172.16.2.2 255.255.255.0
+no shutdown
+exit
+ip default-gateway 172.16.2.1

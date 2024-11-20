@@ -1,0 +1,14 @@
+!
+! R3
+! show access-lists 1
+! show ip int G0/0/0
+!
+enable
+configure terminal
+access-list 1 remark Allow R1 LANs Access
+access-list 1 permit 192.168.10.0 0.0.0.255
+access-list 1 permit 192.168.20.0 0.0.0.255
+access-list 1 deny any
+interface G0/0/0
+ip access-group 1 out
+exit

@@ -1,0 +1,65 @@
+!
+! R2
+!
+enable
+configure terminal
+hostname R2
+enable secret c1sco1234
+ip domain-name ccna-lab.com
+no ip domain lookup
+service password-encryption
+username SSHadmin privilege 15 secret 55Hadm!n
+crypto key generate rsa general-keys modulus 1024
+line con 0
+password cisco
+exec-timeout 6
+login
+logging synchronous
+line vty 0 4
+password cisco
+transport input ssh
+exec-timeout 6
+login local
+exit
+banner motd #Unauthorized Access is Prohibited#
+ipv6 unicast-routing
+!
+! Interface Configuration
+!
+interface G0/0/0
+description to S3 F0/1
+ip address 10.0.4.1 255.255.255.0
+ipv6 address 2001:db8:acad:4::1/64
+ipv6 address fe80::2:a link-local
+no shutdown
+interface G0/0/1
+description to S4 F0/1
+ip address 10.0.5.1 255.255.255.0
+ipv6 address 2001:db8:acad:5::1/64
+ipv6 address fe80::2:b link-local
+no shutdown
+interface S0/1/0
+description to R1
+ip address 10.0.3.2 255.255.255.0
+ipv6 address 2001:db8:acad:3::2/64
+ipv6 address fe80::1:c link-local
+no shutdown
+interface S0/1/1
+description to Internet
+ip address 209.165.200.225 255.255.255.252
+ipv6 address 2001:db8:feed:224::1/64
+ipv6 address fe80::1:d link-local
+no shutdown
+exit
+ip ssh version 2
+end
+! 
+! ip route 0.0.0.0 0.0.0.0 Serial0/1/1
+! ip route 0.0.0.0 0.0.0.0 209.165.200.224
+!
+! show version | include register
+! show version | section image
+! show run | section line
+! show running-config | include password
+!
+copy run start

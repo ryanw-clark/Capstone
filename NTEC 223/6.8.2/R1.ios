@@ -1,0 +1,60 @@
+!
+! R1
+!
+enable
+configure terminal
+hostname R1
+no ip domain lookup
+enable secret class
+line console 0
+password cisco
+login
+line vty 0 4
+password cisco
+login
+exit
+service password-encryption
+banner motd #Unauthorized Access is Prohibited#
+interface G0/0/0
+description Connection to R2
+ip address 209.165.200.230 255.255.255.248
+no shutdown
+interface G0/0/1
+description Connection to S1
+ip address 192.168.1.1 255.255.255.0
+no shutdown
+exit
+ip route 0.0.0.0 0.0.0.0 209.165.200.225
+!
+! ACL
+!
+access-list 1 permit 192.168.1.0 0.0.0.255
+!
+! Pool
+!
+ip nat pool PUBLIC_ACCESS 209.165.200.226 209.165.200.228 netmask 255.255.255.248
+!
+! Association
+!
+ip nat inside source list 1 pool PUBLIC_ACCESS
+interface G0/0/1
+ip nat inside
+interface G0/0/0
+ip nat outside
+end
+copy run start
+!
+! Dynamic NAT -> Dynamic PAT
+!
+no ip nat inside source list 1 pool PUBLIC_ACCESS
+ip nat inside source list 1 pool PUBLIC_ACCESS overload
+!
+! Remove Dynamic PAT
+!
+no ip nat inside source list 1 pool PUBLIC_ACCESS overload
+no ip nat pool PUBLIC_ACCESS
+!
+! NAT, Static
+!
+ip nat inside source list 1 interface G0/0/0 overload
+ip nat inside source static 192.168.1.2 209.165.200.229

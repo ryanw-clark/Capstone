@@ -1,0 +1,23 @@
+!
+! Edge_Router
+!
+enable
+configure terminal
+!
+! ip route 0.0.0.0 0.0.0.0 10.10.10.1
+ip route 0.0.0.0 0.0.0.0 S0/0/0
+! ip route 0.0.0.0 0.0.0.0 10.10.10.5 5
+ip route 0.0.0.0 0.0.0.0 S0/0/1 5
+!
+! ipv6
+!
+ipv6 route ::/0 2001:db8:a:1::1
+ipv6 route ::/0 2001:db8:a:2::1 5
+!
+! show run | include route
+!
+ip route 198.0.0.10 255.255.255.255 10.10.10.1
+ip route 198.0.0.10 255.255.255.255 10.10.10.5 5
+!
+ipv6 route 2001:db8:f:f::10/128 2001:db8:a:1::1
+ipv6 route 2001:db8:f:f::10/128 2001:db8:a:2::1 5

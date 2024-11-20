@@ -1,0 +1,178 @@
+!
+! Last configuration change at 14:50:41 UTC Fri Jan 12 2024
+!
+version 16.9
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+platform qfp utilization monitor load 80
+no platform punt-keepalive disable-kernel-core
+!
+hostname R2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable secret 5 $1$V3ml$V6eNZdGNCkCJE83jI0mTV1
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+!
+!
+!
+login on-success log
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+! 
+! 
+! 
+! 
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+crypto pki trustpoint TP-self-signed-4240113567
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-4240113567
+ revocation-check none
+ rsakeypair TP-self-signed-4240113567
+!
+!
+crypto pki certificate chain TP-self-signed-4240113567
+ certificate self-signed 01
+  30820330 30820218 A0030201 02020101 300D0609 2A864886 F70D0101 05050030 
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 34323430 31313335 3637301E 170D3234 30313132 31343530 
+  35315A17 0D333030 31303130 30303030 305A3031 312F302D 06035504 03132649 
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D34 32343031 
+  31333536 37308201 22300D06 092A8648 86F70D01 01010500 0382010F 00308201 
+  0A028201 0100A29E 20051D01 7E3F9E43 475C8F44 6D8AB3D4 908AED76 5085FEC8 
+  266B3F96 6765C5C5 4F915774 17F5E5A1 930ACD76 084C4A40 B08F1788 D28715BB 
+  4D017FAD 6E1C0B3A 41FE36A7 17E69B6C 095EEAD6 234ED5E2 9C28CE11 C4B7781E 
+  010DAA88 58A0BFC5 0624D261 960CA50D 6278B79A 592FCEAB 2BF48008 C8D6FE0B 
+  B0E19A4E F0BCAE24 870BA9E1 83224BFA 3F8C91E8 449E2E9C 913309A6 3C1D92FB 
+  409A69A0 D0C79E63 42B24262 AFB58C48 446A8699 40317F5B 1E468F59 01B23DC5 
+  90F788B3 BD528639 2C918552 D7D973AC 28EEA82E 89543B99 2CADDBF9 3B70AA0B 
+  735E9EB7 137713FD 06A63B01 E16808F6 0BDE70DE D0A9243E 894E9860 A2E8D04A 
+  17472E33 E3290203 010001A3 53305130 0F060355 1D130101 FF040530 030101FF 
+  301F0603 551D2304 18301680 145BCF7A 3CE52D82 32D94476 0E8BAC40 D7DF4E27 
+  73301D06 03551D0E 04160414 5BCF7A3C E52D8232 D944760E 8BAC40D7 DF4E2773 
+  300D0609 2A864886 F70D0101 05050003 82010100 0D0ADE2D E29C25AD 61873FAB 
+  1369D694 A70501C8 CB7E8ED7 B311DF28 50B39705 DB23B1C9 7CECA174 BB654D71 
+  C73031A1 90F996C1 A6D98566 AF9B3336 3F2B0FEF 427B2CF3 256A333E 714E0B6E 
+  96A69552 8465B9C5 5A86DD6C E8485171 CF99ECB3 A6E968CD 2BC10D15 78854C59 
+  3A258343 256D2E7A 963BDE64 5CF84E1B 05446768 F663FFCA A2BE4A7B D3C1B2B4 
+  76330539 D3A8B437 A85F2C66 BFAA6DE6 C7DB264D 7A4FD378 5293B9CD 4EB45995 
+  5A013778 D8B8EFD7 FBE1716E DA0F0FE4 DDC05934 AD90E7A8 7023A46E 581ADAFB 
+  85DCAFF4 3307549A 12B6325A B6067CD1 E3F1E9D9 1902171D 615AE5EA E6E6420F 
+  6E04F2B4 C107B8BC 1D109815 0C582938 32A57DDE
+  	quit
+!
+no license smart enable
+diagnostic bootup level minimal
+!
+spanning-tree extend system-id
+!
+!
+!
+!
+redundancy
+ mode none
+!
+!
+!
+!
+!
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
+! 
+!
+!
+interface Loopback1
+ ip address 192.168.1.1 255.255.255.0
+ no shutdown
+!
+interface GigabitEthernet0/0/0
+ no ip address
+ negotiation auto
+ no shutdown
+!
+interface GigabitEthernet0/0/1
+ ip address 10.53.0.2 255.255.255.0
+ negotiation auto
+ no shutdown
+!
+interface GigabitEthernet0
+ vrf forwarding Mgmt-intf
+ no ip address
+ negotiation auto
+ no shutdown
+!
+ip forward-protocol nd
+no ip http server
+ip http secure-server
+ip tftp source-interface GigabitEthernet0
+!
+!
+!
+!
+!
+!
+control-plane
+!
+banner motd ^CUnauthorized Access Prohibited^C
+!
+line con 0
+ password 7 0822455D0A16
+ logging synchronous
+ login
+ transport input none
+ stopbits 1
+line aux 0
+ stopbits 1
+line vty 0 4
+ password 7 00071A150754
+ login
+!
+!
+!
+!
+!
+!
+end

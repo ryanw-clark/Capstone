@@ -1,0 +1,54 @@
+!
+! RTR-1
+!
+enable
+configure terminal
+ip route 192.168.10.0 255.255.255.0 GigabitEthernet0/0/0
+ip route 192.168.20.0 255.255.255.0 GigabitEthernet0/0/0
+ip route 192.168.30.0 255.255.255.0 GigabitEthernet0/0/0
+ip route 192.168.99.0 255.255.255.240 GigabitEthernet0/0/0
+no ip domain lookup
+enable secret class
+line console 0
+password cisco
+login
+line vty 0 4
+password cisco
+login
+exit
+banner motd #Authorized Access Only!#
+hostname RTR-1
+service password-encryption
+interface G0/0/0
+description Link to Sciences LAN
+ip address 192.168.0.1 255.255.255.0
+no shutdown
+exit
+interface S0/1/0
+description Link to Internet
+ip address 209.165.201.2 255.255.255.252
+no shutdown
+exit
+interface G0/0/1.40
+description Gateway for VLAN40
+encapsulation dot1q 40
+ip address 192.168.40.1 255.255.255.0
+exit
+interface G0/0/1.50
+description Gateway for VLAN50
+encapsulation dot1q 50
+ip address 192.168.50.1 255.255.255.0
+exit
+interface G0/0/1.60
+description Gateway for VLAN60
+encapsulation dot1q 60
+ip address 192.168.60.1 255.255.255.0
+exit
+interface G0/0/1.99
+description Gateway for VLAN99
+encapsulation dot1q 99 native
+ip address 192.168.99.17 255.255.255.240
+exit
+interface G0/0/1
+no shutdown
+end

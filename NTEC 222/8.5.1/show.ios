@@ -1,0 +1,11 @@
+show running-config | section dhcp
+show ip dhcp binding
+show ip dhcp server statistics
+show ip interface
+show ipv6 interface G0/0/1 | section Joined
+show ipv6 interface G0/0/1 | begin ND
+show ipv6 int br
+show ipv6 dhcp pool
+show ipv6 dhcp binding
+show ipv6 dhcp interface
+show ipv6 dhcp binding

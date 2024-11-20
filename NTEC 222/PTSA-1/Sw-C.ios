@@ -1,0 +1,51 @@
+!
+! Sw-C
+!
+enable
+configure terminal
+hostname SW-3
+interface vlan 99
+ip address 192.168.99.18 255.255.255.240
+no shutdown
+exit
+ip default-gateway 192.168.99.17
+ip domain-name acad.pt
+crypto key generate rsa general-keys modulus 1024
+username admin privilege 15 secret C1sco123!
+enable secret C1sco123!
+line vty 0 15
+transport input ssh
+login local
+exit
+ip ssh version 2
+vlan 40
+name B3
+vlan 50
+name B4
+vlan 60
+name B5
+vlan 99
+name NetAdmin
+exit
+interface range F0/1-5
+switchport mode access
+switchport access vlan 40
+exit
+interface range F0/6-10
+switchport mode access
+switchport access vlan 50
+exit
+interface range F0/11-15
+switchport mode access
+switchport access vlan 60
+exit
+interface F0/24
+switchport mode access
+switchport access vlan 99
+exit
+interface G0/1
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 40,50,60,99
+switchport trunk native vlan 99
+end

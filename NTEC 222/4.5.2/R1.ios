@@ -1,0 +1,50 @@
+!
+! R1
+!
+enable
+configure terminal
+hostname R1
+no ip domain lookup
+enable secret class
+line console 0
+password cisco
+login
+line vty 0 4
+password cisco
+login
+exit
+service password-encryption
+banner motd #Unauthorized Access is Prohibited#
+end
+clock set 00:00:00 1 Jan 2024
+!
+! Reminder:
+! device> enable
+! device# write erase
+! device# delete vlan.dat
+! device# erase startup-config
+! device# reload
+!
+configure terminal
+interface g0/0/1
+no shutdown
+interface g0/0/1.10
+encapsulation dot1q 10
+description Management
+ip address 192.168.10.1 255.255.255.0
+interface g0/0/1.20
+encapsulation dot1q 20
+description Sales
+ip address 192.168.20.1 255.255.255.0
+interface g0/0/1.30
+encapsulation dot1q 30
+description Operations
+ip address 192.168.30.1 255.255.255.0
+interface g0/0/1.1000
+encapsulation dot1q 1000 native
+description Native
+end
+!
+!
+!
+copy running-config startup-config

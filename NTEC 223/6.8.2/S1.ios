@@ -1,0 +1,29 @@
+!
+! S1
+!
+enable
+configure terminal
+hostname S1
+no ip domain lookup
+enable secret class
+line console 0
+password cisco
+login
+line vty 0 15
+password cisco
+login
+exit
+service password-encryption
+banner motd #Unauthorized Access is Prohibited#
+interface range F0/2-4, F0/7-24, G0/1-2
+description Shutdown
+shutdown
+exit
+interface vlan 1
+description Management
+ip address 192.168.1.11 255.255.255.0
+no shutdown
+exit
+ip default-gateway 192.168.1.1
+end
+copy run start

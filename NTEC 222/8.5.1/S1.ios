@@ -1,0 +1,23 @@
+!
+! S1
+!
+enable
+configure terminal
+hostname S1
+no ip domain lookup
+enable secret class
+line console 0
+password cisco
+login
+line vty 0 15
+password cisco
+login
+exit
+service password-encryption
+!
+! Active F0/5, F0/6
+!
+interface range F0/1-4, F0/7-24
+shutdown
+end
+copy run start

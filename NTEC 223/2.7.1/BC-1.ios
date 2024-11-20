@@ -1,0 +1,25 @@
+!
+! BC-1
+!
+enable
+configure terminal
+ip route 0.0.0.0 0.0.0.0 S0/1/1
+interface S0/1/0
+ip ospf 10 area 0
+ip ospf hello-interval 20
+ip ospf dead-interval 80
+exit
+interface S0/1/1
+ip ospf 10 area 0
+exit
+interface G0/0/0
+ip ospf 10 area 0
+ip ospf priority 255
+exit
+router ospf 10
+router-id 6.6.6.6
+default-information originate
+auto-cost reference-bandwidth 1000
+passive-interface S0/1/1
+end
+copy run start

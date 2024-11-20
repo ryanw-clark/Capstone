@@ -1,0 +1,53 @@
+!
+! L3-SW1
+!
+enable
+configure terminal
+hostname MSW-1
+vlan 10
+name B1F1
+interface vlan 10
+description Connection to B1F1
+ip address 192.168.10.1 255.255.255.0
+exit
+vlan 20
+name B1F2
+interface vlan 20
+description Connection to B1F2
+ip address 192.168.20.1 255.255.255.0
+exit
+vlan 30
+name B1F4
+interface vlan 30
+description Connection to B1F4
+ip address 192.168.30.1 255.255.255.0
+exit
+vlan 99
+name NetAdmin
+! interface vlan 99
+! description Management Interface
+! ip address 192.168.99.2 255.255.255.240
+! exit
+int loopback 0
+description Management Interface
+ip address 192.168.99.2 255.255.255.240
+exit
+interface range G1/0/1-2
+channel-group 1 mode active
+exit
+interface range G1/0/3-4
+channel-group 2 mode active
+exit
+interface port-channel 1
+switchport mode trunk
+switchport trunk allowed vlan 10,20,30
+exit
+interface port-channel 2
+switchport mode trunk
+switchport trunk allowed vlan 10,20,30
+exit
+ip routing
+interface G1/1/1
+no switchport
+ip address 192.168.0.2 255.255.255.0
+end

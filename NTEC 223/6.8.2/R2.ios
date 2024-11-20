@@ -1,0 +1,26 @@
+!
+! R2
+!
+enable
+configure terminal
+hostname R2
+no ip domain lookup
+enable secret class
+line console 0
+password cisco
+login
+line vty 0 4
+password cisco
+login
+exit
+service password-encryption
+banner motd #Unauthorized Access is Prohibited#
+interface G0/0/0
+description Connection to R1
+ip address 209.165.200.225 255.255.255.248
+no shutdown
+interface loopback 1
+description Lo1
+ip address 209.165.200.1 255.255.255.224
+end
+copy run start

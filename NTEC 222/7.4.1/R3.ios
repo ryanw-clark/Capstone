@@ -1,0 +1,8 @@
+!
+! R3
+!
+enable
+configure terminal
+interface GigabitEthernet 0/0
+ip helper-address 10.2.2.2
+exit

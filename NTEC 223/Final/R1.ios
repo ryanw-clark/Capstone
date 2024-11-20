@@ -1,0 +1,77 @@
+!
+! R1
+!
+enable
+configure terminal
+no ip domain-lookup
+hostname R1
+enable secret ciscoenpass
+line console 0
+password ciscoconpass
+exit
+security passwords min-length 10
+service password-encryption
+banner motd #Unauthorized Access Prohibited#
+interface g0/0/0
+ip address 198.51.100.1 255.255.255.252
+description "Connection to R2"
+no shutdown
+interface g0/0/1
+ip address 192.168.1.1 255.255.255.0
+description "Connection to S2"
+no shutdown
+interface g0/0/2
+ip address 64.100.1.1 255.255.255.248
+description "Connection to S1"
+no shutdown
+exit
+ip domain-name ccna-lab.com
+username admin secret admin1pass
+line vty 0 4
+login local
+transport input ssh
+exit
+crypto key generate rsa general-keys modulus 1024
+ip ssh version 2
+!
+! OSPFv2
+!
+router ospf 1
+router-id 0.0.0.1
+! g0/0/2
+network 64.100.1.0 0.0.0.7 area 0
+! g0/0/0
+network 198.51.100.0 0.0.0.3 area 0
+! g0/0/1
+! network 192.168.1.0 0.0.0.255 area 0
+passive-interface g0/0/1
+passive-interface g0/0/2
+auto-cost reference-bandwidth 1000
+exit
+int g0/0/0
+ip ospf network point-to-point
+ip ospf hello-interval 30
+ip ospf dead-interval 120
+exit
+!
+! NAT
+!
+ip nat inside source static 192.168.1.5 64.100.1.7
+interface g0/0/1
+ip nat inside
+interface g0/0/0
+ip nat outside
+exit
+!
+! ACL
+!
+ip access-list standard R1-VTY-LIMIT
+remark This ACL Secures Incoming VTY Lines
+permit host 192.168.1.5
+deny any
+exit
+line vty 0 4
+login local
+transport input ssh
+access-class R1-VTY-LIMIT in
+end

@@ -1,0 +1,72 @@
+!
+! R1
+!
+enable
+configure terminal
+no ip domain lookup
+hostname R1
+banner motd #Unauthorized Acess is Prohibited#
+line console 0
+password ciscoconpass
+login
+exit
+enable secret ciscoenpass
+service password-encryption
+security passwords min-length 10
+username admin secret admin1pass
+ip domain-name ccna-ptsa.com
+crypto key generate rsa general-keys modulus 1024
+ip ssh version 2
+line vty 0 15
+login local
+transport input ssh
+exit
+int loopback 0
+description Lo0
+ip address 209.165.201.1 255.255.255.224
+ipv6 address 2001:db8:acad:209::1/64
+ipv6 address fe80::1 link-local
+exit
+ipv6 unicast-routing
+int G0/0/1.2
+description Bikes
+encapsulation dot1Q 2
+ip address 10.19.8.1 255.255.255.192
+ipv6 address 2001:db8:acad:a::1/64
+ipv6 address fe80::1 link-local
+exit
+int G0/0/1.3
+description Trikes
+encapsulation dot1Q 3
+ip address 10.19.8.65 255.255.255.224
+ipv6 address 2001:db8:acad:b::1/64
+ipv6 address fe80::1 link-local
+exit
+int G0/0/1.4
+description Management
+encapsulation dot1Q 4
+ip address 10.19.8.97 255.255.255.248
+ipv6 address 2001:db8:acad:c::1/64
+ipv6 address fe80::1 link-local
+exit
+int G0/0/1.6
+description Native
+encapsulation dot1Q 6 native
+exit
+int G0/0/1
+no shutdown
+exit
+ip route 0.0.0.0 0.0.0.0 loopback 0
+ipv6 route ::/0 loopback 0
+ip dhcp excluded-address 10.19.8.1 10.19.8.52
+ip dhcp pool CCNA-A
+network 10.19.8.0 255.255.255.192
+default-router 10.19.8.1
+domain-name ccna-a.net
+exit
+ip dhcp excluded-address 10.19.8.65 10.19.8.84
+ip dhcp pool CCNA-B
+network 10.19.8.64 255.255.255.224
+default-router 10.19.8.65
+domain-name ccna-b.net
+exit

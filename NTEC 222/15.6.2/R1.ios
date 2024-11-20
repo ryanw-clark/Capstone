@@ -1,0 +1,84 @@
+!
+! R1
+!
+enable
+configure terminal
+hostname R1
+no ip domain lookup
+enable secret class
+line console 0
+password cisco
+login
+line vty 0 4
+password cisco
+login
+exit
+service password-encryption
+banner motd #Unauthorized Access Prohibited#
+end
+! copy run start
+!
+! show cdp neighbors
+!
+configure terminal
+ipv6 unicast-routing
+interface G0/0/0
+description to R2 G0/0/0
+ip address 172.16.1.1 255.255.255.0
+ipv6 address 2001:db8:acad:2::1/64
+ipv6 address fe80::1 link-local
+no shutdown
+exit
+interface G0/0/1
+description to S1 F0/5
+ip address 192.168.1.1 255.255.255.0
+ipv6 address 2001:db8:acad:1::1/64
+ipv6 address fe80::1 link-local
+no shutdown
+exit
+interface Loopback1
+description Lo1
+ip address 10.1.0.1 255.255.255.0
+ipv6 address 2001:db8:acad:10::1/64
+ipv6 address fe80::1 link-local
+exit
+interface Loopback2
+description Lo2
+ip address 209.165.200.225 255.255.255.224
+ipv6 address 2001:db8:acad:209::1/64
+ipv6 address fe80::1 link-local
+exit
+ip route 10.2.0.0 255.255.255.0 192.168.1.2
+! ipv6 route 2001:db8:acad:11::2/64 2001:db8:acad:1::2
+!
+! R2 G0/0/0 ping 172.16.1.2
+!
+ip route 0.0.0.0 0.0.0.0 172.16.1.2
+! ipv6 route ::/0 2001:db8:acad:2::2
+ip route 0.0.0.0 0.0.0.0 192.168.1.2 80
+! ipv6 route ::/0 2001:db8:acad:1::2 80
+!
+! do show ip route
+! do show ipv6 route
+!
+! do traceroute 10.2.0.1
+! do traceroute 209.165.200.193
+!
+interface g0/0/0
+shutdown
+end
+!
+! show ip route static
+! traceroute 209.165.200.193
+!
+configure terminal
+interface g0/0/0
+no shutdown
+end
+!
+! R2 G0/0/0 ping 2001:db8:acad:2::2
+!
+configure terminal
+ipv6 route ::/0 2001:db8:acad:2::2
+end
+copy run start

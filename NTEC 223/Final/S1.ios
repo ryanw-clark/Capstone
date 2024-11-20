@@ -1,0 +1,22 @@
+!
+! S1
+!
+enable
+configure terminal
+hostname S1
+interface vlan1
+ip address 64.100.1.2 255.255.255.248
+no shutdown
+exit
+ip default-gateway 64.100.1.1
+!
+! ACL
+!
+ip access-list standard S1-VTY-LIMIT
+remark This ACL Secures Incoming VTY Lines
+permit host 192.168.1.5
+deny any
+exit
+line vty 0 15
+access-class S1-VTY-LIMIT in
+end

@@ -1,0 +1,61 @@
+!
+! S1
+!
+enable
+configure terminal
+hostname S1
+no ip domain lookup
+enable secret class
+line console 0
+password cisco
+login
+exit
+line vty 0 15
+password cisco
+login
+exit
+service password-encryption
+banner motd #Unauthorized Access is Prohibited#
+vlan 20
+name Management
+vlan 30
+name Operations
+vlan 40
+name Sales
+vlan 999
+name ParkingLot
+vlan 1000
+name Native
+interface vlan 20
+description Management SVI
+ip address 10.20.0.2 255.255.255.0
+exit
+ip default-gateway 10.20.0.1
+int range F0/2-4, F0/7-24, G0/1-2
+switchport mode access
+switchport access vlan 999
+shutdown
+exit
+interface F0/6
+description to PC-A
+switchport access vlan 30
+switchport mode access
+interface F0/1
+description to S2
+switchport mode trunk
+switchport trunk native vlan 1000
+switchport trunk allowed vlan 20,30,40,1000
+interface F0/5
+description to R1
+switchport mode trunk
+switchport trunk native vlan 1000
+switchport trunk allowed vlan 20,30,40,1000
+exit
+username SSHadmin secret $cisco123!
+ip domain name ccna-lab.com
+crypto key generate rsa general-keys modulus 1024
+line vty 0 15
+transport input ssh
+login local
+end
+copy run start
