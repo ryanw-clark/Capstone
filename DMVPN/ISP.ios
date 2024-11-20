@@ -63,7 +63,6 @@ interface GigabitEthernet4
  no shutdown
 
 ! Routing
-! to do:
 ip route 0.0.0.0 0.0.0.0 10.129.3.1
 
 ! NTP
