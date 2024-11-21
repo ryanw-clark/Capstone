@@ -82,7 +82,6 @@ interface Tunnel1
  ip mtu 1400
  ip tcp adjust-mss 1360
  ipv6 tcp adjust-mss 1340
- bandwidth 100000
  no shutdown
 
 ! Routing
@@ -103,5 +102,6 @@ ntp server 192.168.2.1
 logging console 4
 
 ! NAT
-access-list 1 permit 10.2.1.0 0.0.0.255
-ip nat inside source list 1 interface GigabitEthernet1 overload
+access-list 100 deny ip 10.2.1.0 0.0.0.255 172.16.0.0 0.0.0.255
+access-list 100 permit ip 10.2.1.0 0.0.0.255 any
+ip nat inside source list 100 interface GigabitEthernet1 overload

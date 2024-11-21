@@ -40,7 +40,6 @@ line vty 0 4
 interface GigabitEthernet1
  description Link to Internet
  ip address 10.129.3.254 255.255.255.0
- no cdp enable
  ip nat outside
  no shutdown
 
@@ -71,5 +70,4 @@ ntp master 5
 
 ! NAT
 access-list 100 permit ip any any
-
 ip nat inside source list 100 interface GigabitEthernet1 overload

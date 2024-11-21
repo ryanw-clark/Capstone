@@ -9,6 +9,8 @@ banner motd #Unauthorized Access Prohibited#
 ! Security
 enable secret capstone
 username admin privilege 15 secret capstone
+login block-for 120 attempts 6 within 60
+security passwords min-length 8
 
 ! AAA
 aaa new-model
@@ -19,6 +21,8 @@ aaa authorization exec default local
 ip domain-name washington.local
 crypto key generate rsa modulus 4096
 ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 5
 
 ! Line
 line console 0
@@ -70,6 +74,7 @@ interface Tunnel1
  ip nhrp authentication DMVPN
  ip nhrp network-id 1
  ip nhrp nhs 172.16.0.1 nbma 192.168.2.2
+ ip nhrp shortcut
  ip ospf network point-to-multipoint
  tunnel source GigabitEthernet1
  tunnel mode gre multipoint
@@ -78,7 +83,6 @@ interface Tunnel1
  ip mtu 1400
  ip tcp adjust-mss 1360
  ipv6 tcp adjust-mss 1340
- bandwidth 100000
  no shutdown
 
 ! Routing
@@ -99,5 +103,6 @@ ntp server 192.168.1.1
 logging console 4
 
 ! NAT
-access-list 1 permit 10.1.1.0 0.0.0.255
-ip nat inside source list 1 interface GigabitEthernet1 overload
+access-list 100 deny ip 10.1.1.0 0.0.0.255 172.16.0.0 0.0.0.255
+access-list 100 permit ip 10.1.1.0 0.0.0.255 any
+ip nat inside source list 100 interface GigabitEthernet1 overload
