@@ -71,17 +71,12 @@ crypto ipsec profile DMVPN-IPSEC
 interface Tunnel1
  ip address 172.16.0.1 255.255.255.0
  no ip redirects
- ip nhrp authentication DMVPN
  ip nhrp network-id 1
- ip nhrp redirect
  ip ospf network point-to-multipoint
  tunnel source GigabitEthernet1
  tunnel mode gre multipoint
  tunnel key 1
  tunnel protection ipsec profile DMVPN-IPSEC
- ip mtu 1400
- ip tcp adjust-mss 1360
- ipv6 tcp adjust-mss 1340
  no shutdown
 
 ! Routing
