@@ -1,9 +1,11 @@
 ! ZBFW
 show zone security
-show zone-pair security 
+show zone-pair security
 show class-map type inspect
 show policy-map type inspect
-show platform packet-trace packet 0
+
+!
+show arp
 
 ! OSPF
 show ip ospf brief
@@ -15,23 +17,18 @@ show ip ospf database
 show ip nat translations
 show ip nat statistics
 
-! Routing, VPN
-show vrf
-show aaa servers
-show crypto isakmp sa
+! VPN
+show dmvpn
 show crypto ipsec sa
 show crypto ipsec profile
-show crypto ikev2 profile
 show crypto ikev2 sa
+show crypto ikev2 profile
+
+! NHRP
 show ip nhrp
-show dmvpn
-show ip cef 10.1.1.2
+
+! Next hop
+show ip cef 172.16.0.2
 
 ! Other
 show platform hardware throughput level
-
-! DMVPN, NAT
-https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_conn_dmvpn/configuration/xe-16-9/sec-conn-dmvpn-xe-16-9-book/sec-conn-dmvpn-dt-spokes-b-nat.pdf
-! In DMVPN networks, spoke-to-spoke tunneling is limited to spokes that are not behind the NAT device. If
-! one or both spokes are behind a NAT device, a spoke-to-spoke tunnel cannot be built to or from the NAT
-! device because it is possible for the spoke-to-spoke tunnel traffic to fail or be lost for an extended period.

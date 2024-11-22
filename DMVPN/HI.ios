@@ -75,6 +75,8 @@ interface Tunnel1
  ip nhrp map 172.16.0.1 192.168.2.2
  ip nhrp nhs 172.16.0.1
  ip ospf network point-to-multipoint
+ ip ospf hello-interval 20
+ ip ospf dead-interval 80
  tunnel source GigabitEthernet1
  tunnel mode gre multipoint
  tunnel key 1
@@ -95,7 +97,7 @@ ip route 0.0.0.0 0.0.0.0 192.168.3.1
 ntp server time.nist.gov prefer
 ntp server 192.168.3.1
 
-! OSPF-ADJ changes
+! Logging
 logging console 4
 
 ! NAT
