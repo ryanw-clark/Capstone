@@ -91,7 +91,7 @@ router ospf 1
 ip route 0.0.0.0 0.0.0.0 GigabitEthernet1
 
 ! NTP
-ntp server time.nist.gov prefer
+ntp server 132.163.96.5 prefer
 ntp server 192.168.2.1
 
 ! Logging
