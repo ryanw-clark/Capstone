@@ -36,25 +36,19 @@ line vty 0 4
  transport input ssh
  exec-timeout 10 0
 
-! IPv6
-ipv6 unicast-routing
-
 ! Interfaces
 interface Loopback 1
  ip address 3.3.3.3 255.255.255.255
- ipv6 enable
 
 interface GigabitEthernet1
  description Link to ISP
  ip address 192.168.3.2 255.255.255.252
- ipv6 enable
  ip nat outside
  no shutdown
 
 interface GigabitEthernet2
  description Local Network
  ip address 10.3.1.1 255.255.255.0
- ipv6 enable
  ip nat inside
  no shutdown
 
@@ -86,7 +80,6 @@ interface Tunnel1
  tunnel mode gre multipoint
  tunnel key 1
  tunnel protection ipsec profile DMVPN-IPSEC
- ipv6 enable
  no shutdown
 
 ! Routing

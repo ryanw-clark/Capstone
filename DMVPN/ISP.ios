@@ -36,35 +36,28 @@ line vty 0 4
  transport input ssh
  exec-timeout 10 0
 
-! IPv6
-ipv6 unicast-routing
-
 ! Interfaces
 interface GigabitEthernet1
  description Link to Internet
  ip address 10.129.3.254 255.255.255.0
- ipv6 enable
  ip nat outside
  no shutdown
 
 interface GigabitEthernet2
  description Link to Washington
  ip address 192.168.1.1 255.255.255.252
- ipv6 enable
  ip nat inside
  no shutdown
 
 interface GigabitEthernet3
  description Link to Oregon
  ip address 192.168.2.1 255.255.255.252
- ipv6 enable
  ip nat inside
  no shutdown
 
 interface GigabitEthernet4
  description Link to Hawaii
  ip address 192.168.3.1 255.255.255.252
- ipv6 enable
  ip nat inside
  no shutdown
 
