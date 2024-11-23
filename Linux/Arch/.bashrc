@@ -108,4 +108,5 @@ alias journal='journalctl -f | bat --paging=never -l log'
 alias vuln='grep -r . /sys/devices/system/cpu/vulnerabilities/'
 
 # banner
-source ~/.crux.sh
+# source ~/.crux.sh
+neofetch

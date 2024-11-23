@@ -65,8 +65,11 @@ interface GigabitEthernet4
 ip route 0.0.0.0 0.0.0.0 10.129.3.1
 
 ! NTP
-ntp server 132.163.96.5 prefer
+ntp server time.nist.gov prefer
 ntp master 5
+
+! Logging
+logging console 5
 
 ! NAT
 access-list 100 permit ip any any

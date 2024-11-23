@@ -93,11 +93,11 @@ router ospf 1
 ip route 0.0.0.0 0.0.0.0 GigabitEthernet1
 
 ! NTP
-ntp server 132.163.96.5 prefer
-ntp server 192.168.1.1
+ntp server time.nist.gov prefer
+ntp server 192.168.1.1 source GigabitEthernet1
 
 ! Logging
-logging console 4
+logging console 5
 
 ! NAT
 access-list 100 deny ip 10.1.1.0 0.0.0.255 172.16.0.0 0.0.0.255
