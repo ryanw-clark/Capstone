@@ -36,19 +36,25 @@ line vty 0 4
  transport input ssh
  exec-timeout 10 0
 
+! IPv6
+ipv6 unicast-routing
+
 ! Interfaces
 interface Loopback 1
  ip address 3.3.3.3 255.255.255.255
+ ipv6 enable
 
 interface GigabitEthernet1
  description Link to ISP
  ip address 192.168.3.2 255.255.255.252
+ ipv6 enable
  ip nat outside
  no shutdown
 
 interface GigabitEthernet2
  description Local Network
  ip address 10.3.1.1 255.255.255.0
+ ipv6 enable
  ip nat inside
  no shutdown
 
@@ -67,7 +73,7 @@ crypto ikev2 profile DMVPN-PROFILE
 crypto ipsec profile DMVPN-IPSEC
  set ikev2-profile DMVPN-PROFILE
 
-! DMVPN
+! DMVPN Spoke
 interface Tunnel1
  ip address 172.16.0.3 255.255.255.0
  no ip redirects
@@ -80,6 +86,7 @@ interface Tunnel1
  tunnel mode gre multipoint
  tunnel key 1
  tunnel protection ipsec profile DMVPN-IPSEC
+ ipv6 enable
  no shutdown
 
 ! Routing
@@ -103,3 +110,45 @@ logging console 4
 access-list 100 deny ip 10.3.1.0 0.0.0.255 172.16.0.0 0.0.0.255
 access-list 100 permit ip 10.3.1.0 0.0.0.255 any
 ip nat inside source list 100 interface GigabitEthernet1 overload
+
+! ZBFW
+zone security IN
+zone security OUT
+zone security DMZ
+
+class-map type inspect match-any CLASS-IN-OUT
+ match protocol icmp
+ match protocol tcp
+ match protocol udp
+
+class-map type inspect match-any CLASS-OUT-IN
+ match protocol icmp
+ match protocol tcp
+ match protocol udp
+
+policy-map type inspect POLICY-IN-OUT
+ class CLASS-IN-OUT
+  inspect
+ class class-default
+  drop log
+
+policy-map type inspect POLICY-OUT-IN
+ class CLASS-OUT-IN
+  inspect
+ class class-default
+  drop log
+
+zone-pair security IN-OUT source IN destination OUT
+ service-policy type inspect POLICY-IN-OUT
+
+zone-pair security OUT-IN source OUT destination IN
+ service-policy type inspect POLICY-OUT-IN
+
+interface Tunnel1
+ zone-member security IN
+
+interface GigabitEthernet1
+ zone-member security OUT
+
+interface GigabitEthernet2
+ zone-member security IN
