@@ -73,8 +73,7 @@ interface Tunnel1
  no ip redirects
  ip nhrp network-id 1
  ip ospf network point-to-multipoint
- ip ospf hello-interval 10
- ip ospf dead-interval 40
+ ip nhrp map multicast dynamic
  tunnel source GigabitEthernet1
  tunnel mode gre multipoint
  tunnel key 1
@@ -87,6 +86,7 @@ router ospf 1
  passive-interface default
  no passive-interface Tunnel1
  network 10.2.1.0 0.0.0.255 area 0
+ network 172.16.0.0 0.0.0.255 area 0
 
 ip route 0.0.0.0 0.0.0.0 GigabitEthernet1
 

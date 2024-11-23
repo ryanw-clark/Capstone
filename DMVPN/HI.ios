@@ -73,6 +73,7 @@ interface Tunnel1
  no ip redirects
  ip nhrp network-id 1
  ip nhrp map 172.16.0.1 192.168.2.2
+ ip nhrp map multicast 192.168.2.2
  ip nhrp nhs 172.16.0.1
  ip ospf network point-to-multipoint
  tunnel source GigabitEthernet1
@@ -87,6 +88,7 @@ router ospf 1
  passive-interface default
  no passive-interface Tunnel1
  network 10.3.1.0 0.0.0.255 area 0
+ network 172.16.0 0.0.0.255 area 0
 
 ip route 0.0.0.0 0.0.0.0 GigabitEthernet1
 
