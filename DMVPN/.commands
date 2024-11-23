@@ -32,3 +32,7 @@ show ip cef 172.16.0.2
 
 ! Other
 show platform hardware throughput level
+
+! or 6
+! wa 12
+! hi 6
