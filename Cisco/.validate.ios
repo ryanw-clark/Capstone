@@ -1,0 +1,183 @@
+! ==================================================================================================
+! Washington
+! ==================================================================================================
+! SSH from Windows
+ssh -oKexAlgorithms=+diffie-hellman-group-exchange-sha1 -oHostKeyAlgorithms=+ssh-rsa admin@address
+
+! (optional) SSH between devices
+ssh -l admin address
+
+ping 172.16.0.1
+ping 172.16.0.3
+ping 10.2.1.1
+ping 10.3.1.1
+ping 8.8.8.8
+
+show ip cef 172.16.0.1
+show ip cef 172.16.0.3
+show ip cef 10.2.1.1
+show ip cef 10.3.1.1
+show ip cef 8.8.8.8
+
+traceroute 8.8.8.8
+
+! ZBFW
+show zone security
+show zone-pair security
+show class-map type inspect
+show policy-map type inspect
+show policy-map type inspect zone-pair sessions
+
+! ARP
+show arp
+show arp summary
+show ip arp
+show ip arp summary
+
+! OSPF
+show ip ospf
+show ip ospf database
+show ip ospf neighbor
+show ip ospf neighbor detail
+show ip ospf interface brief
+show ip ospf topology-info
+
+! NAT
+show ip nat translations
+show ip nat statistics
+
+! VPN
+show dmvpn
+show crypto ipsec sa
+show crypto ipsec profile
+show crypto ikev2 sa
+show crypto ikev2 profile
+
+! NHRP
+show ip nhrp
+
+! Bandwidth
+show platform hardware throughput level
+
+! ==================================================================================================
+! Oregon
+! ==================================================================================================
+! SSH from Windows
+ssh -oKexAlgorithms=+diffie-hellman-group-exchange-sha1 -oHostKeyAlgorithms=+ssh-rsa admin@address
+
+! (optional) SSH between devices
+ssh -l admin address
+
+ping 172.16.0.2
+ping 172.16.0.3
+ping 10.1.1.1
+ping 10.3.1.1
+ping 8.8.8.8
+
+show ip cef 172.16.0.2
+show ip cef 172.16.0.3
+show ip cef 10.1.1.1
+show ip cef 10.3.1.1
+show ip cef 8.8.8.8
+
+traceroute 8.8.8.8
+
+! ZBFW
+show zone security
+show zone-pair security
+show class-map type inspect
+show policy-map type inspect
+show policy-map type inspect zone-pair sessions
+
+! ARP
+show arp
+show arp summary
+show ip arp
+show ip arp summary
+
+! OSPF
+show ip ospf
+show ip ospf database
+show ip ospf neighbor
+show ip ospf neighbor detail
+show ip ospf interface brief
+show ip ospf topology-info
+
+! NAT
+show ip nat translations
+show ip nat statistics
+
+! VPN
+show dmvpn
+show crypto ipsec sa
+show crypto ipsec profile
+show crypto ikev2 sa
+show crypto ikev2 profile
+
+! NHRP
+show ip nhrp
+
+! Bandwidth
+show platform hardware throughput level
+
+
+! ==================================================================================================
+! Hawaii
+! ==================================================================================================
+! SSH from Windows
+ssh -oKexAlgorithms=+diffie-hellman-group-exchange-sha1 -oHostKeyAlgorithms=+ssh-rsa admin@address
+
+! (optional) SSH between devices
+ssh -l admin address
+
+ping 172.16.0.1
+ping 172.16.0.2
+ping 10.1.1.1
+ping 10.2.1.1
+ping 8.8.8.8
+
+show ip cef 172.16.0.1
+show ip cef 172.16.0.2
+show ip cef 10.1.1.1
+show ip cef 10.2.1.1
+show ip cef 8.8.8.8
+
+traceroute 8.8.8.8
+
+! ZBFW
+show zone security
+show zone-pair security
+show class-map type inspect
+show policy-map type inspect
+show policy-map type inspect zone-pair sessions
+
+! ARP
+show arp
+show arp summary
+show ip arp
+show ip arp summary
+
+! OSPF
+show ip ospf
+show ip ospf database
+show ip ospf neighbor
+show ip ospf neighbor detail
+show ip ospf interface brief
+show ip ospf topology-info
+
+! NAT
+show ip nat translations
+show ip nat statistics
+
+! VPN
+show dmvpn
+show crypto ipsec sa
+show crypto ipsec profile
+show crypto ikev2 sa
+show crypto ikev2 profile
+
+! NHRP
+show ip nhrp
+
+! Bandwidth
+show platform hardware throughput level
