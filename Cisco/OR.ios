@@ -52,6 +52,12 @@ interface GigabitEthernet2
  ip nat inside
  no shutdown
 
+! DNS
+ip name-server 10.100.0.251 8.8.8.8
+
+! DHCP
+no service dhcp
+
 ! IPsec
 crypto ikev2 keyring DMVPN-KEYRING
  peer DMVPN-PEER
