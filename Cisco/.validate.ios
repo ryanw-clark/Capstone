@@ -1,7 +1,7 @@
 ! ==================================================================================================
 ! Washington
 ! ==================================================================================================
-! SSH from Windows
+! SSH
 ssh -oKexAlgorithms=+diffie-hellman-group-exchange-sha1 -oHostKeyAlgorithms=+ssh-rsa admin@address
 
 ! (optional) SSH between devices
@@ -62,7 +62,7 @@ show platform hardware throughput level
 ! ==================================================================================================
 ! Oregon
 ! ==================================================================================================
-! SSH from Windows
+! SSH
 ssh -oKexAlgorithms=+diffie-hellman-group-exchange-sha1 -oHostKeyAlgorithms=+ssh-rsa admin@address
 
 ! (optional) SSH between devices
@@ -124,7 +124,7 @@ show platform hardware throughput level
 ! ==================================================================================================
 ! Hawaii
 ! ==================================================================================================
-! SSH from Windows
+! SSH
 ssh -oKexAlgorithms=+diffie-hellman-group-exchange-sha1 -oHostKeyAlgorithms=+ssh-rsa admin@address
 
 ! (optional) SSH between devices
