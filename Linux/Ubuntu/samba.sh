@@ -10,4 +10,4 @@ sudo nvim /etc/samba/smb.conf
 
 sudo chown -R nobody:nogroup /srv/samba/linux-share
 
-\\ip-address\linux-share
+\\10.2.1.251\linux-share

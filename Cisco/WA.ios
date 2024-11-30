@@ -105,6 +105,12 @@ ntp server 192.168.1.1 source GigabitEthernet1
 ! Logging
 logging console 5
 
+! SNMP
+snmp-server community capstone ro
+snmp-server location Washington
+snmp-server host 10.2.1.251 version 2c capstone
+snmp-server enable traps syslog
+
 ! NAT
 access-list 100 deny ip 10.1.1.0 0.0.0.255 172.16.0.0 0.0.0.255
 access-list 100 permit ip 10.1.1.0 0.0.0.255 any

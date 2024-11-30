@@ -1,8 +1,13 @@
-# After programs are installed
+# 
+# sudo ufw app list
 sudo ufw enable
 sudo ufw allow OpenSSH
 sudo ufw allow "Apache Full"
 sudo ufw allow Samba
+# snmp
+sudo ufw allow 161/udp
+sudo ufw allow 162/udp
+# todo: restrict
 sudo ufw status
 
 To                         Action      From

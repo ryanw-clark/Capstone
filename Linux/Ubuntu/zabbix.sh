@@ -71,3 +71,10 @@ sudo systemctl enable zabbix-server zabbix-agent apache2
 
 username: Admin
 password: zabbix
+
+# Helpful
+sudo apt install nmap
+sudo apt install snmp
+sudo apt install snmp-mibs-downloader
+snmpwalk -v2c -c public 10.2.1.1
+sudo nmap -sU -p 161 10.2.1.1
