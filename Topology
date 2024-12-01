@@ -78,3 +78,40 @@
 |                  | Tunnel 1              | 172.16.0.3/24                     |
 |                  | dmvpn                 |                                   |
 +------------------+-----------------------+-----------------------------------+
+
+
+Site
+
+IPv6 Unique Local Address Range Assignment
+OSPFv3 
+
+ISP
+GigabitEthernet 1 NA
+GigabitEthernet 2 FD00:1::1/64 FE80::1 WA
+GigabitEthernet 3 FD00:2::1/64 FE80::2 OR
+GigabitEthernet 4 FD00:3::1/64 FE80::3 HI
+
+Washington
+GigabitEthernet 1 FD00:1::2/64 ISP connection
+GigabitEthernet 2 FD00:4::1/64 Local Network OSPFv3
+Tunnel 1          FD00:7::2/64 OSPFv3
+GigabitEthernet 3 2001::1/64   DMZ
+
+Oregon
+GigabitEthernet 1 FD00:2::2/64 ISP connection
+GigabitEthernet 2 FD00:5::1/64 Local Network OSPFv3
+Tunnel 1          FD00:7::1/64 OSPFv3
+
+Hawaii
+GigabitEthernet 1 FD00:3::2/64 ISP connection
+GigabitEthernet 2 FD00:6::1/64 Local Network OSPFv3
+Tunnel 1          FD00:7::3/64 OSPFv3
+
+
+
+clock set 12:00:00 1 JAN 2024
+
+Dec  1 21:06:25.665: %CVAC-4-CLI_FAILURE: Configuration command failure: 'no ip domain-lookup' was rejected   ... domain lookup
+*Dec  1 21:06:25.665: %CVAC-4-CLI_FAILURE: Configuration command failure: 'ip domain-name isp.local' was rejected  domain name
+*Dec  1 21:06:25.665: %CVAC-4-CLI_FAILURE: Configuration command failure: 'crypto key generate rsa modulus 4096' was rejected
+*Dec  1 21:06:25.665: %CVAC-4-CLI_FAILURE: Configuration command failure: ' ipv6 address ::1/128' was rejected

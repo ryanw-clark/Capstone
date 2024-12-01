@@ -13,11 +13,18 @@ ping 10.2.1.1
 ping 10.3.1.1
 ping 8.8.8.8
 
+ping ipv6 FD00:7::1
+ping ipv6 FD00:7::3
+
 show ip cef 172.16.0.1
 show ip cef 172.16.0.3
 show ip cef 10.2.1.1
 show ip cef 10.3.1.1
 show ip cef 8.8.8.8
+
+show ipv6 cef FD00:7::1
+show ipv6 cef FD00:7::3
+
 
 traceroute 8.8.8.8
 
@@ -42,6 +49,13 @@ show ip ospf neighbor detail
 show ip ospf interface brief
 show ip ospf topology-info
 
+show ipv6 ospf
+show ipv6 ospf database
+show ipv6 ospf neighbor
+show ipv6 ospf neighbor detail
+show ipv6 ospf interface brief
+show ipv6 ospf topology-info
+
 ! NAT
 show ip nat translations
 show ip nat statistics
@@ -55,6 +69,7 @@ show crypto ikev2 profile
 
 ! NHRP
 show ip nhrp
+show ipv6 nhrp
 
 ! Bandwidth
 show platform hardware throughput level
