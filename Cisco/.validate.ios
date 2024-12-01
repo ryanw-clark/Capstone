@@ -11,21 +11,28 @@ ping 172.16.0.1
 ping 172.16.0.3
 ping 10.2.1.1
 ping 10.3.1.1
+
 ping 8.8.8.8
 
 ping ipv6 FD00:7::1
 ping ipv6 FD00:7::3
+ping ipv6 FD00:5::1
+ping ipv6 FD00:6::1
 
 show ip cef 172.16.0.1
 show ip cef 172.16.0.3
 show ip cef 10.2.1.1
 show ip cef 10.3.1.1
+
 show ip cef 8.8.8.8
 
+! Should return Tunnel1
 show ipv6 cef FD00:7::1
 show ipv6 cef FD00:7::3
+show ipv6 cef FD00:5::1
+show ipv6 cef FD00:6::1
 
-
+! No IPv6 route to internet
 traceroute 8.8.8.8
 
 ! ZBFW
@@ -47,14 +54,12 @@ show ip ospf database
 show ip ospf neighbor
 show ip ospf neighbor detail
 show ip ospf interface brief
-show ip ospf topology-info
 
 show ipv6 ospf
 show ipv6 ospf database
 show ipv6 ospf neighbor
 show ipv6 ospf neighbor detail
 show ipv6 ospf interface brief
-show ipv6 ospf topology-info
 
 ! NAT
 show ip nat translations
@@ -79,6 +84,8 @@ show snmp
 show snmp user
 
 
+
+
 ! ==================================================================================================
 ! Oregon
 ! ==================================================================================================
@@ -92,14 +99,28 @@ ping 172.16.0.2
 ping 172.16.0.3
 ping 10.1.1.1
 ping 10.3.1.1
+
 ping 8.8.8.8
+
+ping ipv6 FD00:7::2
+ping ipv6 FD00:7::3
+ping ipv6 FD00:4::1
+ping ipv6 FD00:6::1
 
 show ip cef 172.16.0.2
 show ip cef 172.16.0.3
 show ip cef 10.1.1.1
 show ip cef 10.3.1.1
+
 show ip cef 8.8.8.8
 
+! Should return Tunnel1
+show ipv6 cef FD00:7::2
+show ipv6 cef FD00:7::3
+show ipv6 cef FD00:4::1
+show ipv6 cef FD00:6::1
+
+! No IPv6 route to internet
 traceroute 8.8.8.8
 
 ! ZBFW
@@ -121,7 +142,12 @@ show ip ospf database
 show ip ospf neighbor
 show ip ospf neighbor detail
 show ip ospf interface brief
-show ip ospf topology-info
+
+show ipv6 ospf
+show ipv6 ospf database
+show ipv6 ospf neighbor
+show ipv6 ospf neighbor detail
+show ipv6 ospf interface brief
 
 ! NAT
 show ip nat translations
@@ -136,6 +162,7 @@ show crypto ikev2 profile
 
 ! NHRP
 show ip nhrp
+show ipv6 nhrp
 
 ! Bandwidth
 show platform hardware throughput level
@@ -143,6 +170,8 @@ show platform hardware throughput level
 ! SNMP
 show snmp
 show snmp user
+
+
 
 
 ! ==================================================================================================
@@ -158,13 +187,24 @@ ping 172.16.0.1
 ping 172.16.0.2
 ping 10.1.1.1
 ping 10.2.1.1
+
 ping 8.8.8.8
+
+ping ipv6 FD00:7::1
+ping ipv6 FD00:7::2
+ping ipv6 FD00:5::1
+ping ipv6 FD00:4::1
 
 show ip cef 172.16.0.1
 show ip cef 172.16.0.2
 show ip cef 10.1.1.1
 show ip cef 10.2.1.1
 show ip cef 8.8.8.8
+
+show ipv6 cef FD00:7::1
+show ipv6 cef FD00:7::2
+show ipv6 cef FD00:5::1
+show ipv6 cef FD00:4::1
 
 traceroute 8.8.8.8
 
@@ -187,7 +227,12 @@ show ip ospf database
 show ip ospf neighbor
 show ip ospf neighbor detail
 show ip ospf interface brief
-show ip ospf topology-info
+
+show ipv6 ospf
+show ipv6 ospf database
+show ipv6 ospf neighbor
+show ipv6 ospf neighbor detail
+show ipv6 ospf interface brief
 
 ! NAT
 show ip nat translations
@@ -202,6 +247,7 @@ show crypto ikev2 profile
 
 ! NHRP
 show ip nhrp
+show ipv6 nhrp
 
 ! Bandwidth
 show platform hardware throughput level
