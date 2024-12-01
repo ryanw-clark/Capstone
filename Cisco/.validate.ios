@@ -59,6 +59,11 @@ show ip nhrp
 ! Bandwidth
 show platform hardware throughput level
 
+! SNMP
+show snmp
+show snmp user
+
+
 ! ==================================================================================================
 ! Oregon
 ! ==================================================================================================
@@ -121,6 +126,8 @@ show ip nhrp
 show platform hardware throughput level
 
 ! SNMP
+show snmp
+show snmp user
 
 
 ! ==================================================================================================
@@ -183,3 +190,7 @@ show ip nhrp
 
 ! Bandwidth
 show platform hardware throughput level
+
+! SNMP
+show snmp
+show snmp user

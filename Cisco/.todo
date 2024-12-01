@@ -1,3 +1,6 @@
-snmp
-ipv6
-zbfw
+ipv6:
+    interfaces: ula, link-local
+    tunnel
+    nat
+    zbfw
+    linux devices
