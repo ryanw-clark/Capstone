@@ -112,6 +112,7 @@ router ospfv3 1
  no passive-interface Tunnel1
 
 ip route 0.0.0.0 0.0.0.0 GigabitEthernet1
+
 ipv6 route ::/0 GigabitEthernet1
 
 ! NTP
@@ -130,6 +131,7 @@ snmp-server enable traps syslog
 ! NAT
 access-list 100 deny ip 10.2.1.0 0.0.0.255 172.16.0.0 0.0.0.255
 access-list 100 permit ip 10.2.1.0 0.0.0.255 any
+
 ip nat inside source list 100 interface GigabitEthernet1 overload
 
 ! ZBFW

@@ -91,8 +91,8 @@ interface Tunnel1
  zone-member security IN
  ip ospf network point-to-multipoint
  ipv6 address FD00:7::3/64
- ipv6 nhrp map FD00:7::1/64 192.168.2.2
  ipv6 nhrp map multicast 192.168.2.2
+ ipv6 nhrp map FD00:7::1/64 192.168.2.2
  ipv6 nhrp network-id 1
  ipv6 nhrp nhs FD00:7::1 nbma 192.168.2.2
  ipv6 ospf 1 area 0
@@ -111,13 +111,13 @@ router ospf 1
  network 10.3.1.0 0.0.0.255 area 0
  network 172.16.0.0 0.0.0.255 area 0
 
-! OSPFv3 Routing
 router ospfv3 1
  router-id 3.3.3.3
  passive-interface default
  no passive-interface Tunnel1
 
 ip route 0.0.0.0 0.0.0.0 GigabitEthernet1
+
 ipv6 route ::/0 GigabitEthernet1
 
 ! NTP
@@ -136,6 +136,7 @@ snmp-server enable traps syslog
 ! NAT
 access-list 100 deny ip 10.3.1.0 0.0.0.255 172.16.0.0 0.0.0.255
 access-list 100 permit ip 10.3.1.0 0.0.0.255 any
+
 ip nat inside source list 100 interface GigabitEthernet1 overload
 
 ! ZBFW
