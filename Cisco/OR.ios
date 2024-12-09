@@ -1,6 +1,7 @@
 ! ==============================================================================
 ! Oregon - DMVPN Hub
 ! ==============================================================================
+! CSR1000V:99WDVBDWTBF
 hostname Oregon
 no ip domain lookup
 service password-encryption
@@ -81,7 +82,7 @@ crypto ipsec profile DMVPN-IPSEC
 
 ! DMVPN Hub
 interface Tunnel1
- bandwidth 1000
+ bandwidth 1000000
  ip address 172.16.0.1 255.255.255.0
  no ip redirects
  ip nhrp network-id 1

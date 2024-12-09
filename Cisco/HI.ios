@@ -1,6 +1,7 @@
 ! ==============================================================================
 ! Hawaii - DMVPN Spoke
 ! ==============================================================================
+! CSR1000V:9M8J6AM2RKC
 hostname Hawaii
 no ip domain lookup
 service password-encryption
@@ -81,7 +82,7 @@ crypto ipsec profile DMVPN-IPSEC
 
 ! DMVPN Spoke
 interface Tunnel1
- bandwidth 1000
+ bandwidth 1000000
  ip address 172.16.0.3 255.255.255.0
  no ip redirects
  ip nhrp map 172.16.0.1 192.168.2.2
