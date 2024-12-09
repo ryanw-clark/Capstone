@@ -1,6 +1,7 @@
 ! ==============================================================================
 ! ISP
 ! ==============================================================================
+! CSR1000V:93OSO4KJ928
 hostname ISP
 no ip domain lookup
 service password-encryption
@@ -82,4 +83,5 @@ logging console 5
 
 ! NAT
 access-list 100 permit ip any any
+
 ip nat inside source list 100 interface GigabitEthernet1 overload
